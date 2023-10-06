@@ -55,8 +55,8 @@
                         </div>
                         <div class="col-lg-6">
                             <fieldset class="form-group">
-                                <label class="form-label semibold" for="titulo_ticket">Título del Ticket</label>
-                                <input type="text" class="form-control" id="titulo_ticket" name="titulo_ticket" placeholder="Ingrese Titulo">
+                                <label class="form-label semibold" for="titulo_ticket">Asunto</label>
+                                <input type="text" class="form-control" id="titulo_ticket" name="titulo_ticket" placeholder="Ingrese Asunto">
                             </fieldset>
                         </div>
                         <div class="col-lg-12">

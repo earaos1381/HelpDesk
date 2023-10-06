@@ -21,7 +21,39 @@
 	
     <div class="page-content">
 		<div class="container-fluid">
-			Blank page.
+
+        <header class="section-header">
+				<div class="tbl">
+					<div class="tbl-row">
+						<div class="tbl-cell">
+							<h3>Consultar Ticket</h3>
+							<ol class="breadcrumb breadcrumb-simple">
+								<li><a href="..\Home\">Home</a></li>
+								<li class="active">Ticket</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</header>
+
+            <div class="box-typical box-typical-padding">
+                <table id="ticket_data" class="table table-bordered table-striped table-vcenter js-dataTable-full">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%;">No. Ticket</th>
+                            <th style="width: 15%;">Categoria</th>
+                            <th class="d-none d-sm-table-cell" style="width: 25%;">Asunto</th>
+                            <th style="width: 15%;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+                
+
+            </div>
+
 		</div>
 	</div>
 
