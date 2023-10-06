@@ -6,8 +6,8 @@
             $conectar=parent::conexion();
             parent::set_names();
 
-            $sql = "INSERT INTO mesaayuda.tickets (user_id, id_categoria, titulo_ticket, descripcion, estado) 
-                    VALUES (?, ?, ?, ?, 1);";
+            $sql = "INSERT INTO mesaayuda.tickets (user_id, id_categoria, titulo_ticket, descripcion, estado, fecha_create) 
+                    VALUES (?, ?, ?, ?, 1, now());";
 
             $sql = $conectar->prepare($sql);
             $sql->bindValue(1, $user_id);
@@ -29,7 +29,8 @@
             tickets.user_id, 
             tickets.id_categoria, 
             tickets.titulo_ticket, 
-            tickets.descripcion, 
+            tickets.descripcion,
+            tickets.fecha_create, 
             users.user_nom, 
             users.user_ap, 
             categorias.cat_descripcion 

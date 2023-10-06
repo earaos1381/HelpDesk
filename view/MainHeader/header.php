@@ -33,7 +33,8 @@
 	
 	                <div class="mobile-menu-right-overlay"></div>
 
-					<input type="hidden" id="usuario_id" value="<?php echo $_SESSION["user_id"]?>">
+					<input type="hidden" id="usuario_id" value="<?php echo $_SESSION["user_id"]?>"> <!--ID usuario -->
+					<input type="hidden" id="id_roluser" value="<?php echo $_SESSION["id_rol"]?>"> <!--Rol de usuario -->
 
                     <!-- <div class="dropdown dropdown-typical">
 	                    <a href="#" class="dropdown-toggle no-arr">

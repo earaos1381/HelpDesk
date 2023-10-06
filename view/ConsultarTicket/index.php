@@ -43,6 +43,7 @@
                             <th style="width: 10%;">No. Ticket</th>
                             <th style="width: 15%;">Categoria</th>
                             <th class="d-none d-sm-table-cell" style="width: 25%;">Asunto</th>
+                            <th class="d-none d-sm-table-cell" style="width: 15%;">Fecha de Creación</th>
                             <th style="width: 15%;">Acciones</th>
                         </tr>
                     </thead>

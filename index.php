@@ -31,7 +31,12 @@
     <div class="page-center">
         <div class="page-center-in">
             <div class="container-fluid">
+
                 <form class="sign-box" action="" method="post" id="login_form">
+
+                <input type="hidden" id="id_rol" name="id_rol" value="1">
+                
+                <header class="sign-title" id="lbltitulo">Usuario</header>
                     <div class="sign-avatar">
                         <img src="public/img/avatar-sign.png" alt="">
                     </div>
@@ -73,6 +78,9 @@
                         <input type="password" id="user_password" name="user_password" class="form-control" placeholder="Constraseña"/>
                     </div>
                     <div class="form-group">
+                        <div class="float-left reset">
+                            <a href="#" id="btnsoporte">Acceso Soporte</a>
+                        </div>
                         <div class="float-right reset">
                             <a href="reset-password.html">Reiniciar Contraseña</a>
                         </div>
@@ -107,5 +115,7 @@
         });
     </script>
 <script src="public/js/app.js"></script>
+
+<script type="text/javascript" src="index.js"></script>
 </body>
 </html>

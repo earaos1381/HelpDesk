@@ -13,10 +13,11 @@
             $datos = $ticket->ListarTicketPorUser($_POST["user_id"]);
             $data= Array();
             foreach($datos as $row){
-                $sub_array = array();
+                $sub_array = array(); //Columnas
                 $sub_array[] = $row["id_ticket"];
                 $sub_array[] = $row["cat_descripcion"];
                 $sub_array[] = $row["titulo_ticket"];
+                $sub_array[] = date("d/m/Y - H:i:s", strtotime($row["fecha_create"]));
                 $sub_array[] ='<button type="button" onClick="ver('.$row["id_ticket"].');" id="'.$row["id_ticket"].'" class="btn btn-inline btn-primary btn-sm ladda-button"><i class="fa fa-eye"></i></button>';
                 $data[] = $sub_array;
             }
