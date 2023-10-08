@@ -48,7 +48,7 @@
                         <input type="hidden" id="user_id" name="user_id" value="<?php echo $_SESSION["user_id"]?>">
                         <div class="col-lg-6">
                             <fieldset class="form-group">
-                                <label class="form-label semibold" for="exampleInput">Categoria</label>
+                                <label class="form-label semibold" for="id_categoria">Categoria</label>
                                 <select id="id_categoria" name="id_categoria" class="form-control">
                                 </select>
                             </fieldset>
