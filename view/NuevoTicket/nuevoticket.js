@@ -15,6 +15,23 @@ $(document).ready(function() {
             link: [],
             air: []
         },
+        callbacks: {
+            onImageUpload: function(image) {
+                console.log("Image detect...");
+                myimagetreat(image[0]);
+            },
+            onPaste: function (e) {
+                console.log("Text detect...");
+            }
+        },
+        toolbar: [
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['font', ['strikethrough', 'superscript', 'subscript']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']]
+        ]
     });
 
     $.post("../../controller/categoria.php?op=combo",function(data, status){
@@ -25,25 +42,35 @@ $(document).ready(function() {
 function guardarEditar(e){
     e.preventDefault();
     var formData = new FormData($("#ticket_form")[0]);
-    $.ajax({
-        url: "../../controller/ticket.php?op=guardar",
-        type: "POST",
-        data: formData,
-        contentType: false,
-        processData: false,
 
-        success: function(datos){
-            $('#id_categoria').val('');
-            $('#titulo_ticket').val('');
-            $('#ticket_descripcion').summernote('reset');
-            swal({
-                title: "Correcto",
-                text: "Ticket agregado exitosamente",
-                type: "success",
-                confirmButtonClass: "btn-succcess"
-            });
-        }
-    });
+    if ($('#ticket_descripcion').summernote('isEmpty') || $('#titulo_ticket').val()=='' || $('#id_categoria').val() == ''){
+        swal({
+            title: "Advertencia",
+            text: "Favor de llenar todos los campos",
+            type: "warning",
+            confirmButtonClass: "btn-succcess"
+        });
+        } else {
+        $.ajax({
+            url: "../../controller/ticket.php?op=guardar",
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+
+            success: function(datos){
+                $('#id_categoria').val('');
+                $('#titulo_ticket').val('');
+                $('#ticket_descripcion').summernote('reset');
+                swal({
+                    title: "Correcto",
+                    text: "Ticket agregado exitosamente",
+                    type: "success",
+                    confirmButtonClass: "btn-succcess"
+                });
+            }
+        });
+    }
 }
 
 init();

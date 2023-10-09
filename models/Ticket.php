@@ -142,5 +142,19 @@
 
             return $resultado = $sql->fetchAll();
         }
+
+        public function actualizarTicket($ticket_id){
+            $conectar= parent::conexion();
+            parent::set_names();
+            $sql="UPDATE tickets 
+                SET	
+                    tickets.estado_ticket = 'Cerrado'
+                where
+                    tickets.ticket_id = ? ";
+            $sql=$conectar->prepare($sql);
+            $sql->bindValue(1, $ticket_id);
+            $sql->execute();
+            return $resultado=$sql->fetchAll();
+        }
     }
 ?>

@@ -118,7 +118,11 @@ $(document).ready(function(){
 });
 
 function ver(ticket_id){
-    window.open('http://localhost/mesaayuda/view/DetalleTicket/?id='+ ticket_id +'');
+        // Abre la nueva pestaña
+        var nuevaVentana = window.open('http://localhost/mesaayuda/view/DetalleTicket/?id='+ ticket_id +'');
+
+        // Cierra la ventana actual (ventana padre)
+        window.close();
 }
  
 init();

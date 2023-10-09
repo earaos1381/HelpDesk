@@ -129,6 +129,7 @@
                         $output["estado_ticket"] = '<span class="label label-pill label-danger">Cerrado</span>';
                     }
 
+                    $output["estado_ticket_texto"] = $row["estado_ticket"];
                     $output["fecha_create"] = date("d/m/Y - H:i:s", strtotime($row["fecha_create"]));
                     $output["user_nom"] = $row["user_nom"];
                     $output["user_ap"] = $row["user_ap"];
@@ -141,6 +142,10 @@
         case "guardarDetalle":
             $ticket->InsertarTicketDetalle($_POST["ticket_id"],$_POST["user_id"],$_POST["descripcion"]);
         break;
+
+        case "actualizar":
+            $ticket->actualizarTicket($_POST["ticket_id"]);
+            break;
     }
 
 ?>

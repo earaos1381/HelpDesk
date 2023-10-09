@@ -66,7 +66,7 @@
             <section class="activity-line" id="lbldetalle">
 			</section>
 
-            <div class="box-typical box-typical-padding">
+            <div class="box-typical box-typical-padding" id="pnldetalle">
 				<p>Ingrese su duda o consulta</p>
 				<div class="row">
                         <div class="col-lg-12">
