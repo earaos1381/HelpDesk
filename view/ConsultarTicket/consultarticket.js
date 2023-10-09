@@ -1,5 +1,5 @@
 var tabla;
-var usuarioID = $('#usuario_id').val();
+var user_id = $('#usuario_id').val();
 var rolID = $('#id_roluser').val();
 
 function init(){
@@ -26,7 +26,7 @@ $(document).ready(function(){
                 url: '../../controller/ticket.php?op=listarUser',
                 type : "post",
                 dataType : "json",  
-                data:{ user_id : usuarioID },                        
+                data:{ user_id : user_id },                        
                 error: function(e){
                     console.log(e.responseText);    
                 }
@@ -79,7 +79,7 @@ $(document).ready(function(){
             "ajax":{
                 url: '../../controller/ticket.php?op=listar',
                 type : "post",
-                dataType : "json",                       
+                dataType : "json",                     
                 error: function(e){
                     console.log(e.responseText);    
                 }

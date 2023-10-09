@@ -66,7 +66,8 @@
                     tickets.estado_ticket, 
                     tickets.fecha_create, 
                     users.user_nom, 
-                    users.user_ap, 
+                    users.user_ap,
+                    users.user_correo, 
                     categorias.cat_descripcion 
                     FROM tickets  
                     INNER JOIN categorias ON tickets.id_categoria = categorias.cat_id
@@ -75,7 +76,6 @@
 
             $sql = $conectar->prepare($sql);
             $sql->execute();
-
             return $resultado = $sql->fetchAll();
         }
 
@@ -97,6 +97,28 @@
 
             $sql = $conectar->prepare($sql);
             $sql->bindValue(1, $ticket_id);
+            $sql->execute();
+
+            return $resultado = $sql->fetchAll();
+        }
+
+        public function InsertarTicketDetalle($detalleticket_id, $user_id, $descripcion){
+
+            $conectar=parent::conexion();
+            parent::set_names(); 
+            $sql = "INSERT INTO mesaayuda.detalleticket (
+                    detalleticket_id,
+                    ticket_id, 
+                    user_id, 
+                    descripcion, 
+                    fecha_create, 
+                    estado) 
+                    VALUES (NULL, ?, ?, ?, now(), '1')";
+
+            $sql = $conectar->prepare($sql);
+            $sql->bindValue(1, $detalleticket_id);
+            $sql->bindValue(2, $user_id);
+            $sql->bindValue(3, $descripcion);
             $sql->execute();
 
             return $resultado = $sql->fetchAll();

@@ -5,6 +5,7 @@
     $ticket = new Ticket();
 
     switch($_GET["op"]){
+
         case "guardar":
             $ticket->CrearTicket($_POST["user_id"],$_POST["id_categoria"],$_POST["titulo_ticket"],$_POST["descripcion"]);
         break;
@@ -109,6 +110,35 @@
                     }
                 ?>
             <?php
+        break;
+
+        case "mostrar":
+            $datos = $ticket->ListarTicket($_POST["ticket_id"]);
+            if (is_array($datos) == true and count($datos) > 0){
+                foreach($datos as $row)
+                {
+                    $output["ticket_id"] = $row["ticket_id"];
+                    $output["user_id"] = $row["user_id"];
+                    $output["id_categoria"] = $row["id_categoria"];
+                    $output["titulo_ticket"] = $row["titulo_ticket"];
+                    $output["descripcion"] = $row["descripcion"];
+                    if ($row["estado_ticket"]=="Abierto"){
+                        $output["estado_ticket"] = '<span class="label label-pill label-success">Abierto</span>';
+                    } else{
+                        $output["estado_ticket"] = '<span class="label label-pill label-danger">Cerrado</span>';
+                    }
+
+                    $output["fecha_create"] = date("d/m/Y - H:i:s", strtotime($row["fecha_create"]));
+                    $output["user_nom"] = $row["user_nom"];
+                    $output["user_ap"] = $row["user_ap"];
+                    $output["cat_descripcion"] = $row["cat_descripcion"];
+                }
+                echo json_encode($output);
+            }
+        break;
+
+        case "guardarDetalle":
+            $ticket->InsertarTicketDetalle($_POST["ticket_id"],$_POST["user_id"],$_POST["descripcion"]);
         break;
     }
 

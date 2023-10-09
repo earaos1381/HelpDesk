@@ -25,10 +25,10 @@
                     <div class="tbl">
                         <div class="tbl-row">
                             <div class="tbl-cell">
-                                <h3>Detalle Ticket</h3>
-                                <span class="label label-pill label-danger">Cerrado</span>
-                                <span class="label label-pill label-primary">Nombre de Usuario</span>
-                                <span class="label label-pill label-default">22/09/2023</span>
+                                <h3 id="lblnoticket"></h3>
+                                <span id="lblestado"></span>
+                                <span class="label label-pill label-primary" id="lblnomusuario"></span>
+                                <span class="label label-pill label-default" id="lblfechacreacion"></span>
                                 <ol class="breadcrumb breadcrumb-simple">
                                     <li><a href="..\Home\">Home</a></li>
                                     <li class="active">Detalle Ticket</li>
@@ -54,8 +54,10 @@
                 </div>
                 <div class="col-lg-12">
                     <fieldset class="form-group">
-                        <label class="form-label semibold" for="descripcion">Descripción</label>
-                        <input type="text" class="form-control" id="descripcion" name="descripcion" readonly>
+                        <label class="form-label semibold" for="descripcion_usu">Descripción</label>
+                        <div class="summernote-theme-1" >
+                            <textarea id="descripcion_usu" name="descripcion_usu" class="summernote"></textarea>
+                        </div>
                     </fieldset>
                 </div>
                 </div>
@@ -76,8 +78,8 @@
                             </fieldset>
                         </div>
                         <div class="col-lg-12">
-                            <button type="submit" name="action" value="add" class="btn btn-rounded btn-inline btn-primary">Enviar</button>
-                            <button type="submit" name="action" value="add" class="btn btn-rounded btn-inline btn-danger">Cerrar Ticket</button>
+                            <button type="button" id="btnenviar" class="btn btn-rounded btn-inline btn-primary">Enviar</button>
+                            <button type="button" id="btcerrarticket" class="btn btn-rounded btn-inline btn-danger">Cerrar Ticket</button>
                         </div>
 				</div>
             </div>
