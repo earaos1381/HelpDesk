@@ -37,7 +37,7 @@
 
             <div class="box-typical box-typical-padding">
 				<p>
-					Favor de llenar todos los campos del ticket
+					Favor de llenar todos los campos del ticketihwegdfjsadfkjahdsf
 				</p>
 
 				<h5 class="m-t-lg with-border">Información de Ticket</h5>
