@@ -52,11 +52,9 @@
             return $resultado = $sql->fetchAll();
         }
 
-        public function ListarTicket(){
-
+        public function ListarTicketPorID($ticket_id){
             $conectar=parent::conexion();
             parent::set_names();
-
             $sql = "SELECT 
                     tickets.ticket_id, 
                     tickets.user_id, 
@@ -67,23 +65,45 @@
                     tickets.fecha_create, 
                     users.user_nom, 
                     users.user_ap,
-                    users.user_correo, 
                     categorias.cat_descripcion 
                     FROM tickets  
                     INNER JOIN categorias ON tickets.id_categoria = categorias.cat_id
                     INNER JOIN users ON tickets.user_id = users.user_id
-                    WHERE tickets.estado = 1";
+                    WHERE tickets.estado = 1
+                    AND tickets.ticket_id = ?";
 
             $sql = $conectar->prepare($sql);
+            $sql->bindValue(1, $ticket_id);
             $sql->execute();
             return $resultado = $sql->fetchAll();
         }
 
-        public function DetalleTicket($ticket_id){
+        public function ListarTicket(){
+            $conectar= parent::conexion();
+            parent::set_names();
+            $sql = "SELECT
+                    tickets.ticket_id, 
+                    tickets.user_id, 
+                    tickets.id_categoria, 
+                    tickets.titulo_ticket, 
+                    tickets.descripcion,
+                    tickets.estado_ticket, 
+                    tickets.fecha_create, 
+                    users.user_nom, 
+                    users.user_ap,
+                    categorias.cat_descripcion 
+                    FROM tickets
+                    INNER JOIN categorias ON tickets.id_categoria = categorias.cat_id
+                    INNER JOIN users ON tickets.user_id = users.user_id
+                    WHERE tickets.estado = 1";
+            $sql=$conectar->prepare($sql);
+            $sql->execute();
+            return $resultado=$sql->fetchAll();
+        }
 
+        public function DetalleTicket($ticket_id){
             $conectar=parent::conexion();
             parent::set_names();
-
             $sql = "SELECT 
                     detalleticket.detalleticket_id,
                     detalleticket.descripcion,
@@ -93,12 +113,11 @@
                     users.id_rol
                     FROM detalleticket
                     INNER JOIN users ON  detalleticket.user_id = users.user_id
-                    WHERE detalleticket.ticket_id = ?";
+                    WHERE ticket_id = ?";
 
             $sql = $conectar->prepare($sql);
             $sql->bindValue(1, $ticket_id);
             $sql->execute();
-
             return $resultado = $sql->fetchAll();
         }
 

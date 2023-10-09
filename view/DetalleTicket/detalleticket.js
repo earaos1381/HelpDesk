@@ -6,9 +6,13 @@ function init(){
 $(document).ready(function(){
     var ticket_id = getUrlParameter('id');
 
-    listardetalle(ticket_id);
+    $.post("../../controller/ticket.php?op=listarDetalle",{ticket_id : ticket_id }, function(data){
+        $('#lbldetalle').html(data);
+
+    });
 
     $.post("../../controller/ticket.php?op=mostrar",{ticket_id : ticket_id }, function(data){
+        console.log(data);
         data = JSON.parse(data);
         $('#lblestado').html(data.estado_ticket);
         $('#lblnomusuario').html(data.user_nom+' '+data.user_ap);
@@ -19,7 +23,7 @@ $(document).ready(function(){
         $('#descripcion_usu').summernote('code', data.descripcion);
     });
 
-    $('#ticket_descripcion').summernote({
+    $('#descripcion_usu').summernote({
         height: 400,
         lang: "es-ES",
         popover: {
@@ -39,9 +43,15 @@ $(document).ready(function(){
         
     });
 
-    $('#descripcion_usu').summernote({
+    $('#ticket_descripcion').summernote({
         height: 400,
         lang: "es-ES",
+        popover: {
+            image: [],
+            link: [],
+            air: []
+        },
+        
     });
 
     $('#descripcion_usu').summernote('disable');
@@ -83,12 +93,5 @@ $(document).on("click", "#btnenviar", function(){
 $(document).on("click", "#btcerrarticket", function(){
 
 });
-
-function listardetalle(ticket_id){
-    $.post("../../controller/ticket.php?op=listarDetalle",{ticket_id : ticket_id }, function(data){
-        $('#lbldetalle').html(data);
-
-    });
-}
 
 init();

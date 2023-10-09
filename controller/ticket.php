@@ -113,7 +113,8 @@
         break;
 
         case "mostrar":
-            $datos = $ticket->ListarTicket($_POST["ticket_id"]);
+            
+            $datos = $ticket->ListarTicketPorID($_POST["ticket_id"]);
             if (is_array($datos) == true and count($datos) > 0){
                 foreach($datos as $row)
                 {
