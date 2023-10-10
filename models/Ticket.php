@@ -1,23 +1,27 @@
 <?php
     class Ticket extends Conectar{
 
-        public function CrearTicket($user_id, $id_categoria, $titulo_ticket, $descripcion){
+        public function CrearTicket($user_id, $id_uniadmin, $id_categoria, $titulo_ticket, $descripcion){
 
             $conectar=parent::conexion();
             parent::set_names();
 
-            $sql = "INSERT INTO mesaayuda.tickets (user_id, id_categoria, 
+            $sql = "INSERT INTO mesaayuda.tickets (
+                    user_id, 
+                    id_uniadmin,
+                    id_categoria, 
                     titulo_ticket, 
                     descripcion, 
                     estado_ticket, 
                     fecha_create, estado) 
-                    VALUES (?, ?, ?, ?, 'Abierto',now(), 1);";
+                    VALUES (?, ?, ?, ?, ?, 'Abierto',now(), 1);";
 
             $sql = $conectar->prepare($sql);
             $sql->bindValue(1, $user_id);
-            $sql->bindValue(2, $id_categoria);
-            $sql->bindValue(3, $titulo_ticket);
-            $sql->bindValue(4, $descripcion);
+            $sql->bindValue(2, $id_uniadmin);
+            $sql->bindValue(3, $id_categoria);
+            $sql->bindValue(4, $titulo_ticket);
+            $sql->bindValue(5, $descripcion);
             $sql->execute();
 
             return $resultado = $sql->fetchAll();
@@ -30,7 +34,8 @@
 
             $sql = "SELECT 
                     tickets.ticket_id, 
-                    tickets.user_id, 
+                    tickets.user_id,
+                    tickets.id_uniadmin, 
                     tickets.id_categoria, 
                     tickets.titulo_ticket, 
                     tickets.descripcion,
@@ -38,8 +43,10 @@
                     tickets.fecha_create, 
                     users.user_nom, 
                     users.user_ap, 
-                    categorias.cat_descripcion 
-                    FROM tickets  
+                    categorias.cat_descripcion,
+                    unidadesadmin.uni_descripcion 
+                    FROM tickets
+                    INNER JOIN unidadesadmin ON tickets.id_uniadmin = unidadesadmin.id_uniadmin  
                     INNER JOIN categorias ON tickets.id_categoria = categorias.cat_id
                     INNER JOIN users ON tickets.user_id = users.user_id
                     WHERE tickets.estado = 1
@@ -57,16 +64,19 @@
             parent::set_names();
             $sql = "SELECT 
                     tickets.ticket_id, 
-                    tickets.user_id, 
+                    tickets.user_id,
+                    tickets.id_uniadmin, 
                     tickets.id_categoria, 
                     tickets.titulo_ticket, 
                     tickets.descripcion,
                     tickets.estado_ticket, 
                     tickets.fecha_create, 
                     users.user_nom, 
-                    users.user_ap,
-                    categorias.cat_descripcion 
-                    FROM tickets  
+                    users.user_ap, 
+                    categorias.cat_descripcion,
+                    unidadesadmin.uni_descripcion 
+                    FROM tickets
+                    INNER JOIN unidadesadmin ON tickets.id_uniadmin = unidadesadmin.id_uniadmin  
                     INNER JOIN categorias ON tickets.id_categoria = categorias.cat_id
                     INNER JOIN users ON tickets.user_id = users.user_id
                     WHERE tickets.estado = 1
@@ -83,16 +93,19 @@
             parent::set_names();
             $sql = "SELECT
                     tickets.ticket_id, 
-                    tickets.user_id, 
+                    tickets.user_id,
+                    tickets.id_uniadmin, 
                     tickets.id_categoria, 
                     tickets.titulo_ticket, 
                     tickets.descripcion,
                     tickets.estado_ticket, 
                     tickets.fecha_create, 
                     users.user_nom, 
-                    users.user_ap,
-                    categorias.cat_descripcion 
+                    users.user_ap, 
+                    categorias.cat_descripcion,
+                    unidadesadmin.uni_descripcion  
                     FROM tickets
+                    INNER JOIN unidadesadmin ON tickets.id_uniadmin = unidadesadmin.id_uniadmin
                     INNER JOIN categorias ON tickets.id_categoria = categorias.cat_id
                     INNER JOIN users ON tickets.user_id = users.user_id
                     WHERE tickets.estado = 1";

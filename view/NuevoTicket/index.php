@@ -48,8 +48,8 @@
                         <input type="hidden" id="user_id" name="user_id" value="<?php echo $_SESSION["user_id"]?>">
                         <div class="col-lg-4">
                             <fieldset class="form-group">
-                                <label class="form-label semibold" for="id_unidadadmin">Unidad Administrativa</label>
-                                <select id="id_unidadadmin" name="id_unidadadmin" class="form-control">
+                                <label class="form-label semibold" for="id_uniadmin">Unidad Administrativa</label>
+                                <select id="id_uniadmin" name="id_uniadmin" class="form-control">
                                 </select>
                             </fieldset>
                         </div>

@@ -41,6 +41,7 @@
                     <thead>
                         <tr>
                             <th style="width: 5%;">No. Ticket</th>
+                            <th style="width: 15%;">Unidad Administrativa</th>
                             <th style="width: 15%;">Categoria</th>
                             <th class="d-none d-sm-table-cell" style="width: 40%;">Asunto</th>
                             <th class="d-none d-sm-table-cell" style="width: 5%;">Estado</th>

@@ -123,6 +123,7 @@ function listardetalle(ticket_id){
 
         $('#lblnoticket').html("Detalle Ticket - #"+data.ticket_id);
 
+        $('#id_uniadmin').val(data.uni_descripcion)
         $('#id_categoria').val(data.cat_descripcion); 
         $('#titulo_ticket').val(data.titulo_ticket);
         $('#descripcion_usu').summernote('code', data.descripcion);

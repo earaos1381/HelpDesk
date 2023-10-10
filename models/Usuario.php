@@ -38,8 +38,88 @@
             }
         }
 
-        
+        public function crearUsuario($user_nom, $user_ap, $user_correo, $user_password, $id_rol){
+            
+            $conectar=parent::conexion();
+            parent::set_names();
+            $sql = "INSERT INTO mesaayuda.users (
+                    user_id,
+                    user_nom,
+                    user_ap,
+                    user_correo,
+                    user_password,
+                    id_rol,
+                    fecha_create,
+                    fecha_update,
+                    fecha_elim,
+                    estado) 
+                    VALUES (NULL, ?, ?, ?, ?, ?, now(), NULL, NULL, '1');";
+            $sql = $conectar->prepare($sql);
+            $sql->bindValue(1, $user_nom);
+            $sql->bindValue(2, $user_ap);
+            $sql->bindValue(3, $user_correo);
+            $sql->bindValue(4, $user_password);
+            $sql->bindValue(5, $id_rol);
+            $sql->execute();
+            return $resultado = $sql->fetchAll();
+        }
 
+        public function actualizarUsuario($user_id, $user_nom, $user_ap, $user_correo, $user_password, $id_rol){
+            $conectar=parent::conexion();
+            parent::set_names();
+            $sql = "UPDATE users SET
+                    user_nom = ?,
+                    user_ap = ?,
+                    user_correo = ?,
+                    user_password = ?,
+                    id_rol = ?
+                    WHERE user_id = ?";
+            $sql = $conectar->prepare($sql);
+            $sql->bindValue(1, $user_nom);
+            $sql->bindValue(2, $user_ap);
+            $sql->bindValue(3, $user_correo);
+            $sql->bindValue(4, $user_password);
+            $sql->bindValue(5, $id_rol);
+            $sql->bindValue(6, $user_id);
+            $sql->execute();
+            return $resultado = $sql->fetchAll();
+        }
+
+        public function eliminarUsuario($user_id){
+            $conectar=parent::conexion();
+            parent::set_names();
+            $sql = "UPDATE mesaayuda.users
+                    SET estado = '0',
+                        fecha_elim = now()
+                    WHERE user_id = ?";
+            $sql = $conectar->prepare($sql);
+            $sql->bindValue(1, $user_id);
+            $sql->execute();
+            return $resultado = $sql->fetchAll();
+        }
+
+        public function obtenerUsuario(){
+            $conectar=parent::conexion();
+            parent::set_names();
+            $sql = "SELECT *
+                    FROM users
+                    WHERE estado = '1'";
+            $sql = $conectar->prepare($sql);
+            $sql->execute();
+            return $resultado = $sql->fetchAll();
+        }
+
+        public function obtenerUsuarioId($user_id){
+            $conectar=parent::conexion();
+            parent::set_names();
+            $sql = "SELECT *
+                    FROM users
+                    WHERE user_id = ?";
+            $sql = $conectar->prepare($sql);
+            $sql->bindValue(1, $user_id);
+            $sql->execute();
+            return $resultado = $sql->fetchAll();
+        }
     }
 
 ?>

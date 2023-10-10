@@ -1,0 +1,67 @@
+<?php
+    require_once("../config/conexion.php");
+    require_once("../models/Usuario.php");
+    
+    $usuario = new Usuario();
+
+    switch($_GET["op"]){
+        case "guardaryeditar":
+            if(empty($_POST["user_id"])){
+                if(is_array($datos) == true and count($datos) == 0){
+                    $usuario->crearUsuario($_POST["user_nom"],$_POST["user_ap"],$_POST["user_correo"],$_POST["user_password"],$_POST["id_rol"]);
+                }
+            } else {
+                $usuario->actualizarUsuario($_POST["user_id"],$_POST["user_nom"],$_POST["user_ap"],$_POST["user_correo"],$_POST["user_password"],$_POST["id_rol"]);
+            }
+        break;
+
+        case "listar":
+            $datos = $usuario->obtenerUsuario();
+            $data= Array();
+            foreach($datos as $row){
+                $sub_array = array(); //Columnas
+                $sub_array[] = $row["user_nom"];
+                $sub_array[] = $row["user_ap"];
+                $sub_array[] = $row["user_correo"];
+                $sub_array[] = $row["user_password"];
+
+                if($row["id_rol"] == "1"){
+                    $sub_array[] = '<span class="label label-pill label-success">Usuario</span>';
+                } else {
+                    $sub_array[] = '<span class="label label-pill label-info">Soporte</span>';
+                }
+                
+                $sub_array[] ='<button type="button" onClick="editar('.$row["user_id"].');" id="'.$row["user_id"].'" class="btn btn-inline btn-warning btn-sm ladda-button"><i class="fa fa-edit"></i></button>';
+                $sub_array[] ='<button type="button" onClick="eliminar('.$row["user_id"].');" id="'.$row["user_id"].'" class="btn btn-inline btn-danger btn-sm ladda-button"><i class="fa fa-trash"></i></button>';
+                $data[] = $sub_array;
+            }
+
+            $results = array(
+                "sEcho"=>1,
+                "iTotalRecords"=>count($data),
+                "itotalDisplayRecords"=>count($data),
+                "aaData"=>$data);
+            echo json_encode($results);    
+        break;
+
+        case "eliminar":
+            $usuario->eliminarUsuario($_POST["user_id"]);
+        break;
+
+        case "mostrar":
+            $datos = $usuario->obtenerUsuarioId($_POST["user_id"]);
+            if (is_array($datos) == true and count($datos) > 0){
+                foreach($datos as $row)
+                {
+                    $output["user_id"] = $row["user_id"];
+                    $output["user_nom"] = $row["user_nom"];
+                    $output["user_ap"] = $row["user_ap"];
+                    $output["user_correo"] = $row["user_correo"];
+                    $output["user_password"] = $row["user_password"];
+                    $output["id_rol"] = $row["id_rol"];
+                }
+                echo json_encode($output);
+            }
+        break;
+    }
+?>

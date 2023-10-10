@@ -7,7 +7,7 @@
     switch($_GET["op"]){
 
         case "guardar":
-            $ticket->CrearTicket($_POST["user_id"],$_POST["id_categoria"],$_POST["titulo_ticket"],$_POST["descripcion"]);
+            $ticket->CrearTicket($_POST["user_id"],$_POST["id_uniadmin"],$_POST["id_categoria"],$_POST["titulo_ticket"],$_POST["descripcion"]);
         break;
 
         case "actualizar":
@@ -22,6 +22,7 @@
             foreach($datos as $row){
                 $sub_array = array(); //Columnas
                 $sub_array[] = $row["ticket_id"];
+                $sub_array[] = $row["uni_descripcion"];
                 $sub_array[] = $row["cat_descripcion"];
                 $sub_array[] = $row["titulo_ticket"];
 
@@ -50,6 +51,7 @@
             foreach($datos as $row){
                 $sub_array = array(); //Columnas
                 $sub_array[] = $row["ticket_id"];
+                $sub_array[] = $row["uni_descripcion"];
                 $sub_array[] = $row["cat_descripcion"];
                 $sub_array[] = $row["titulo_ticket"];
 
@@ -126,6 +128,7 @@
                 {
                     $output["ticket_id"] = $row["ticket_id"];
                     $output["user_id"] = $row["user_id"];
+                    $output["id_uniadmin"] = $row["id_uniadmin"];
                     $output["id_categoria"] = $row["id_categoria"];
                     $output["titulo_ticket"] = $row["titulo_ticket"];
                     $output["descripcion"] = $row["descripcion"];
@@ -139,6 +142,7 @@
                     $output["fecha_create"] = date("d/m/Y - H:i:s", strtotime($row["fecha_create"]));
                     $output["user_nom"] = $row["user_nom"];
                     $output["user_ap"] = $row["user_ap"];
+                    $output["uni_descripcion"] = $row["uni_descripcion"];
                     $output["cat_descripcion"] = $row["cat_descripcion"];
                 }
                 echo json_encode($output);

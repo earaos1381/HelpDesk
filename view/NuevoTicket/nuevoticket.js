@@ -34,16 +34,22 @@ $(document).ready(function() {
         ]
     });
 
+
+    $.post("../../controller/unidadAdmin.php?op=combo",function(data, status){
+        $('#id_uniadmin').html(data);
+    });
+
     $.post("../../controller/categoria.php?op=combo",function(data, status){
         $('#id_categoria').html(data);
     });
+    
 });
 
 function guardarEditar(e){
     e.preventDefault();
     var formData = new FormData($("#ticket_form")[0]);
 
-    if ($('#ticket_descripcion').summernote('isEmpty') || $('#titulo_ticket').val()=='' || $('#id_categoria').val() == ''){
+    if ($('#ticket_descripcion').summernote('isEmpty') || $('#id_uniadmin').val()=='' || $('#titulo_ticket').val()=='' || $('#id_categoria').val() == ''){
         swal({
             title: "Advertencia",
             text: "Favor de llenar todos los campos",
@@ -59,6 +65,7 @@ function guardarEditar(e){
             processData: false,
 
             success: function(datos){
+                $('#id_uniadmin').val('');
                 $('#id_categoria').val('');
                 $('#titulo_ticket').val('');
                 $('#ticket_descripcion').summernote('reset');
