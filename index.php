@@ -38,8 +38,9 @@
                 
                 <header class="sign-title" id="lbltitulo">Usuario</header>
                     <div class="sign-avatar">
-                        <img src="public/img/avatar-sign.png" alt="">
+                        <img src="public/img/1.jpg" alt="" id="imgtipo">
                     </div>
+
                     <header class="sign-title">Iniciar Sesión</header>
 
                     <?php
@@ -82,7 +83,7 @@
                             <a href="#" id="btnsoporte">Acceso Soporte</a>
                         </div>
                         <div class="float-right reset">
-                            <a href="reset-password.html">Reiniciar Contraseña</a>
+                            <a href="reset-password.html">Cambiar Contraseña</a>
                         </div>
                     </div>
                     <input type="hidden" name="enviar" class="form-control" value="si">

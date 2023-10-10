@@ -37,7 +37,7 @@
 
             <div class="box-typical box-typical-padding">
 				<p>
-					Favor de llenar todos los campos del ticketihwegdfjsadfkjahdsf
+					Favor de llenar todos los campos del Ticket
 				</p>
 
 				<h5 class="m-t-lg with-border">Información de Ticket</h5>
@@ -46,14 +46,21 @@
                     <form method="post" id="ticket_form">
 
                         <input type="hidden" id="user_id" name="user_id" value="<?php echo $_SESSION["user_id"]?>">
-                        <div class="col-lg-6">
+                        <div class="col-lg-4">
+                            <fieldset class="form-group">
+                                <label class="form-label semibold" for="id_unidadadmin">Unidad Administrativa</label>
+                                <select id="id_unidadadmin" name="id_unidadadmin" class="form-control">
+                                </select>
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-4">
                             <fieldset class="form-group">
                                 <label class="form-label semibold" for="id_categoria">Categoria</label>
                                 <select id="id_categoria" name="id_categoria" class="form-control">
                                 </select>
                             </fieldset>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-4">
                             <fieldset class="form-group">
                                 <label class="form-label semibold" for="titulo_ticket">Asunto</label>
                                 <input type="text" class="form-control" id="titulo_ticket" name="titulo_ticket" placeholder="Ingrese Asunto">

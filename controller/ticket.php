@@ -10,6 +10,12 @@
             $ticket->CrearTicket($_POST["user_id"],$_POST["id_categoria"],$_POST["titulo_ticket"],$_POST["descripcion"]);
         break;
 
+        case "actualizar":
+            $ticket->actualizarTicket($_POST["ticket_id"]);
+            $ticket->InsertarTicketDetalleCerrado($_POST["ticket_id"],$_POST["user_id"]);
+            
+        break;
+
         case "listarUser":
             $datos = $ticket->ListarTicketPorUser($_POST["user_id"]);
             $data= Array();
@@ -80,7 +86,7 @@
                                     <div class="activity-line-item-user">
                                         <div class="activity-line-item-user-photo">
                                             <a href="#">
-                                                <img src="../../public/img/photo-64-2.jpg" alt="">
+                                                <img src="../../public/img/<?php echo $row['id_rol']?>.jpg" alt="">
                                             </a>
                                         </div>
                                         <div class="activity-line-item-user-name"><?php echo $row['user_nom'].' '.$row['user_ap'];?></div>
@@ -143,9 +149,6 @@
             $ticket->InsertarTicketDetalle($_POST["ticket_id"],$_POST["user_id"],$_POST["descripcion"]);
         break;
 
-        case "actualizar":
-            $ticket->actualizarTicket($_POST["ticket_id"]);
-            break;
     }
 
 ?>

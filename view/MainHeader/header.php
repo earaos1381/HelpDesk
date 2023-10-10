@@ -19,7 +19,7 @@
 	                <div class="site-header-shown">
 	                    <div class="dropdown user-menu">
 	                        <button class="dropdown-toggle" id="dd-user-menu" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-	                            <img src="../../public/img/avatar-2-64.png" alt="">
+	                            <img src="../../public/img/<?php echo $_SESSION["id_rol"]?>.jpg" alt="">
 	                        </button>
 	                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dd-user-menu">
 							<a class="dropdown-item"><span class="lblcontactonomx"><?php echo $_SESSION["user_nom"]?> <?php echo $_SESSION["user_ap"]?></span></a>

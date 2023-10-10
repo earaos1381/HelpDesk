@@ -8,27 +8,6 @@ $(document).ready(function(){
 
     listardetalle(ticket_id);
 
-    $.post("../../controller/ticket.php?op=mostrar",{ticket_id : ticket_id }, function(data){
-        data = JSON.parse(data);
-        $('#lblestado').html(data.estado_ticket);
-        $('#lblnomusuario').html(data.user_nom+' '+data.user_ap);
-        $('#lblfechacreacion').html(data.fecha_create);
-
-        $('#lblnoticket').html("Detalle Ticket - #"+data.ticket_id);
-
-        $('#id_categoria').val(data.cat_descripcion); 
-        $('#titulo_ticket').val(data.titulo_ticket);
-        $('#descripcion_usu').summernote('code', data.descripcion);
-
-        
-        if(data.estado_ticket_texto == 'Cerrado'){
-            $('#pnldetalle').hide();
-        } else {
-            
-        }
-        
-    });
-
     $('#ticket_descripcion').summernote({
         height: 400,
         lang: "es-ES",
@@ -109,28 +88,51 @@ $(document).on("click", "#btcerrarticket", function(){
         confirmButtonText: "Si",
         cancelButtonText: "No",
         closeOnConfirm: false,
-    }, function(isConfirm) {
+    }, 
+    function(isConfirm) {
         if (isConfirm) {
             var ticket_id = getUrlParameter('id'); 
-            $.post("../../controller/ticket.php?op=actualizar",{ticket_id : ticket_id }, function(data){  
-                swal({
-                    title: "¡Ticket Cerrado!",
-                    text: "El Ticket se ha cerrado exitosamente",
-                    type: "success",
-                    confirmButtonClass: "btn-success"
-                }, function() {
-                    location.reload(); // Recargar la página después de cerrar el ticket
-                });
+            var user_id = $('#usuario_id').val(); 
+            $.post("../../controller/ticket.php?op=actualizar",{ticket_id : ticket_id, user_id : user_id }, function(data){ 
+
+            });
+
+            listardetalle(ticket_id);
+
+            swal({
+                title: "¡Ticket Cerrado!",
+                text: "El Ticket se ha cerrado exitosamente",
+                type: "success",
+                confirmButtonClass: "btn-success"  
             });
         }
     });
 });
 
-
 function listardetalle(ticket_id){
     $.post("../../controller/ticket.php?op=listarDetalle",{ticket_id : ticket_id }, function(data){
         $('#lbldetalle').html(data);
 
+    });
+
+    $.post("../../controller/ticket.php?op=mostrar",{ticket_id : ticket_id }, function(data){
+        data = JSON.parse(data);
+        $('#lblestado').html(data.estado_ticket);
+        $('#lblnomusuario').html(data.user_nom+' '+data.user_ap);
+        $('#lblfechacreacion').html(data.fecha_create);
+
+        $('#lblnoticket').html("Detalle Ticket - #"+data.ticket_id);
+
+        $('#id_categoria').val(data.cat_descripcion); 
+        $('#titulo_ticket').val(data.titulo_ticket);
+        $('#descripcion_usu').summernote('code', data.descripcion);
+
+        
+        if(data.estado_ticket_texto == 'Cerrado'){
+            $('#pnldetalle').hide();
+        } else {
+            
+        } 
     });
 }
 

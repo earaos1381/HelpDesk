@@ -121,7 +121,7 @@
             return $resultado = $sql->fetchAll();
         }
 
-        public function InsertarTicketDetalle($detalleticket_id, $user_id, $descripcion){
+        public function InsertarTicketDetalle($ticket_id, $user_id, $descripcion){
 
             $conectar=parent::conexion();
             parent::set_names(); 
@@ -135,9 +135,30 @@
                     VALUES (NULL, ?, ?, ?, now(), '1')";
 
             $sql = $conectar->prepare($sql);
-            $sql->bindValue(1, $detalleticket_id);
+            $sql->bindValue(1, $ticket_id);
             $sql->bindValue(2, $user_id);
             $sql->bindValue(3, $descripcion);
+            $sql->execute();
+
+            return $resultado = $sql->fetchAll();
+        }
+
+        public function InsertarTicketDetalleCerrado($ticket_id, $user_id){
+
+            $conectar=parent::conexion();
+            parent::set_names(); 
+            $sql = "INSERT INTO mesaayuda.detalleticket (
+                    detalleticket_id,
+                    ticket_id, 
+                    user_id, 
+                    descripcion, 
+                    fecha_create, 
+                    estado) 
+                    VALUES (NULL, ?, ?, '-Ticket Cerrado-', now(), '1')";
+
+            $sql = $conectar->prepare($sql);
+            $sql->bindValue(1, $ticket_id);
+            $sql->bindValue(2, $user_id);
             $sql->execute();
 
             return $resultado = $sql->fetchAll();
