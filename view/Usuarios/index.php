@@ -37,6 +37,8 @@
 			</header>
 
             <div class="box-typical box-typical-padding">
+            <button type="button" id="btnnuevo" class="btn btn-inline btn-primary-outline">Crear Usuario</button>
+
                 <table id="usuario_data" class="table table-bordered table-striped table-vcenter js-dataTable-full">
                     <thead>
                         <tr>
@@ -61,8 +63,10 @@
 	</div>
 
     <!-- Contenido -->
+    <?php require_once("modalmantenimiento.php");?>
 
     <?php require_once("../MainJS/js.php");?>
+
     <script type="text/javascript" src="usuarios.js"></script>
 </body>
 </html>

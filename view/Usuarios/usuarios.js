@@ -1,7 +1,35 @@
 var tabla;
 
 function init(){
+    $('#usuario_form').on("submit", function(e){
+        guardaryEditar(e);
+    });
+}
 
+function guardaryEditar(e){
+    e.preventDefault();
+	var formData = new FormData($("#usuario_form")[0]);
+    $.ajax({
+        url: "../../controller/usuario.php?op=guardaryeditar",
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(datos){    
+            console.log(datos);
+            $('#usuario_form')[0].reset();
+
+            $("#modalmantenimiento").modal('hide');
+            $('#usuario_data').DataTable().ajax.reload();
+
+            swal({
+                title: "Usuario Actualizado!",
+                text: "Completado.",
+                type: "success",
+                confirmButtonClass: "btn-success"
+            });
+        }
+    }); 
 }
 
 $(document).ready(function(){
@@ -60,7 +88,19 @@ $(document).ready(function(){
 });
 
 function editar(user_id){
-    console.log(user_id);
+    $('#mdltitulo').html('Editar Usuario');
+
+    $.post("../../controller/usuario.php?op=mostrar",{user_id : user_id}, function(data){ 
+        data = JSON.parse(data);
+        $('#user_id').val(data.user_id);
+        $('#user_nom').val(data.user_nom);
+        $('#user_ap').val(data.user_ap);
+        $('#user_correo').val(data.user_correo);
+        $('#user_password').val(data.user_password);
+        $('#id_rol').val(data.id_rol).trigger('change');
+    });
+
+    $('#modalmantenimiento').modal('show');
 }
 
 function eliminar(user_id){
@@ -92,4 +132,10 @@ function eliminar(user_id){
     });
 }
  
+$(document).on("click", "#btnnuevo", function(){
+    $('#mdltitulo').html('Nuevo Usuario');
+    $('#usuario_form')[0].reset();
+    $('#modalmantenimiento').modal('show');
+});
+
 init();

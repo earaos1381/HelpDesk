@@ -7,9 +7,9 @@
     switch($_GET["op"]){
         case "guardaryeditar":
             if(empty($_POST["user_id"])){
-                if(is_array($datos) == true and count($datos) == 0){
+                /* if(is_array($datos) == true and count($datos) == 0){ */
                     $usuario->crearUsuario($_POST["user_nom"],$_POST["user_ap"],$_POST["user_correo"],$_POST["user_password"],$_POST["id_rol"]);
-                }
+                /* } */
             } else {
                 $usuario->actualizarUsuario($_POST["user_id"],$_POST["user_nom"],$_POST["user_ap"],$_POST["user_correo"],$_POST["user_password"],$_POST["id_rol"]);
             }
@@ -62,6 +62,44 @@
                 }
                 echo json_encode($output);
             }
+        break;
+
+        case "total":
+            $datos = $usuario->obtenerUsuarioTicketId($_POST["user_id"]);
+            if (is_array($datos) == true and count($datos) > 0){
+                foreach($datos as $row)
+                {
+                    $output["TOTAL"] = $row["TOTAL"];
+                }
+                echo json_encode($output);
+            }
+        break;
+
+        case "totalabierto":
+            $datos = $usuario->obtenerUsuarioTicketAbiertoId($_POST["user_id"]);
+            if (is_array($datos) == true and count($datos) > 0){
+                foreach($datos as $row)
+                {
+                    $output["TOTAL"] = $row["TOTAL"];
+                }
+                echo json_encode($output);
+            }
+        break;
+
+        case "totalcerrado":
+            $datos = $usuario->obtenerUsuarioTicketCerradoId($_POST["user_id"]);
+            if (is_array($datos) == true and count($datos) > 0){
+                foreach($datos as $row)
+                {
+                    $output["TOTAL"] = $row["TOTAL"];
+                }
+                echo json_encode($output);
+            }
+        break;
+
+        case "grafico";
+            $datos=$usuario->obtenerUsuarioGrafico($_POST["user_id"]);  
+            echo json_encode($datos);
         break;
     }
 ?>

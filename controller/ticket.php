@@ -153,6 +153,45 @@
             $ticket->InsertarTicketDetalle($_POST["ticket_id"],$_POST["user_id"],$_POST["descripcion"]);
         break;
 
+        case "total":
+            $datos = $ticket->obtenerTicket();
+            if (is_array($datos) == true and count($datos) > 0){
+                foreach($datos as $row)
+                {
+                    $output["TOTAL"] = $row["TOTAL"];
+                }
+                echo json_encode($output);
+            }
+        break;
+
+        case "totalabierto":
+            $datos = $ticket->obtenerTicketAbierto();
+            if (is_array($datos) == true and count($datos) > 0){
+                foreach($datos as $row)
+                {
+                    $output["TOTAL"] = $row["TOTAL"];
+                }
+                echo json_encode($output);
+            }
+        break;
+
+        case "totalcerrado":
+            $datos = $ticket->obtenerTicketCerrado();
+            if (is_array($datos) == true and count($datos) > 0){
+                foreach($datos as $row)
+                {
+                    $output["TOTAL"] = $row["TOTAL"];
+                }
+                echo json_encode($output);
+            }
+        break;
+
+        case "grafico";
+            $datos=$ticket->obtenerTicketGrafico();  
+            echo json_encode($datos);
+        break;
+
+
     }
 
 ?>

@@ -120,6 +120,62 @@
             $sql->execute();
             return $resultado = $sql->fetchAll();
         }
+
+        public function obtenerUsuarioTicketId($user_id){
+            $conectar=parent::conexion();
+            parent::set_names();
+            $sql = "SELECT COUNT(*) AS TOTAL
+                    FROM tickets
+                    WHERE user_id = ?";
+            $sql = $conectar->prepare($sql);
+            $sql->bindValue(1, $user_id);
+            $sql->execute();
+            return $resultado = $sql->fetchAll();
+        }
+
+        public function obtenerUsuarioTicketAbiertoId($user_id){
+            $conectar=parent::conexion();
+            parent::set_names();
+            $sql = "SELECT COUNT(*) AS TOTAL
+                    FROM tickets
+                    WHERE user_id = ? 
+                    AND estado_ticket = 'Abierto'";
+            $sql = $conectar->prepare($sql);
+            $sql->bindValue(1, $user_id);
+            $sql->execute();
+            return $resultado = $sql->fetchAll();
+        }
+
+        public function obtenerUsuarioTicketCerradoId($user_id){
+            $conectar=parent::conexion();
+            parent::set_names();
+            $sql = "SELECT COUNT(*) AS TOTAL
+                    FROM tickets
+                    WHERE user_id = ? 
+                    AND estado_ticket = 'Cerrado'";
+            $sql = $conectar->prepare($sql);
+            $sql->bindValue(1, $user_id);
+            $sql->execute();
+            return $resultado = $sql->fetchAll();
+        }
+
+        public function obtenerUsuarioGrafico($user_id){
+            $conectar= parent::conexion();
+            parent::set_names();
+            $sql="SELECT categorias.cat_descripcion as nom,COUNT(*) AS total
+                FROM   tickets  JOIN  
+                categorias ON tickets.id_categoria = categorias.cat_id  
+                WHERE
+                tickets.estado = 1
+                AND tickets.user_id = ?
+                GROUP BY 
+                categorias.cat_descripcion 
+                ORDER BY total DESC";
+            $sql=$conectar->prepare($sql);
+            $sql->bindValue(1, $user_id);
+            $sql->execute();
+            return $resultado=$sql->fetchAll();
+        }
     }
 
 ?>

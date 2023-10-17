@@ -190,5 +190,54 @@
             $sql->execute();
             return $resultado=$sql->fetchAll();
         }
+
+        public function obtenerTicket(){
+            $conectar=parent::conexion();
+            parent::set_names();
+            $sql = "SELECT COUNT(*) AS TOTAL
+                    FROM tickets";
+            $sql = $conectar->prepare($sql);
+            $sql->execute();
+            return $resultado = $sql->fetchAll();
+        }
+
+        public function obtenerTicketAbierto(){
+            $conectar=parent::conexion();
+            parent::set_names();
+            $sql = "SELECT COUNT(*) AS TOTAL
+                    FROM tickets
+                    WHERE estado_ticket = 'Abierto'";
+            $sql = $conectar->prepare($sql);
+            $sql->execute();
+            return $resultado = $sql->fetchAll();
+        }
+
+        public function obtenerTicketCerrado(){
+            $conectar=parent::conexion();
+            parent::set_names();
+            $sql = "SELECT COUNT(*) AS TOTAL
+                    FROM tickets
+                    WHERE estado_ticket = 'Cerrado'";
+            $sql = $conectar->prepare($sql);
+            $sql->execute();
+            return $resultado = $sql->fetchAll();
+        }
+
+        public function obtenerTicketGrafico(){
+            $conectar= parent::conexion();
+            parent::set_names();
+            $sql="SELECT categorias.cat_descripcion as nom,COUNT(*) AS total
+                FROM   tickets  JOIN  
+                categorias ON tickets.id_categoria = categorias.cat_id  
+                WHERE    
+                tickets.estado = 1
+                GROUP BY 
+                categorias.cat_descripcion 
+                ORDER BY total DESC";
+            $sql=$conectar->prepare($sql);
+            $sql->execute();
+            return $resultado=$sql->fetchAll();
+        }
+
     }
 ?>
