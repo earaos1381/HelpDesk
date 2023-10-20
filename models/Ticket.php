@@ -13,8 +13,11 @@
             $sql->bindValue(4, $titulo_ticket);
             $sql->bindValue(5, $descripcion);
             $sql->execute();
-
-            return $resultado = $sql->fetchAll();
+            
+            $sql1 = "SELECT last_insert_id() AS 'ticket_id'";
+            $sql1 = $conectar->prepare($sql1);
+            $sql1->execute();
+            return $resultado = $sql1->fetchAll(pdo::FETCH_ASSOC);
         }
 
         public function ListarTicketPorUser($user_id){

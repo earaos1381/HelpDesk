@@ -57,26 +57,32 @@ function guardarEditar(e){
             confirmButtonClass: "btn-succcess"
         });
         } else {
-        $.ajax({
-            url: "../../controller/ticket.php?op=guardar",
-            type: "POST",
-            data: formData,
-            contentType: false,
-            processData: false,
 
-            success: function(datos){
-                $('#id_uniadmin').val('');
-                $('#id_categoria').val('');
-                $('#titulo_ticket').val('');
-                $('#ticket_descripcion').summernote('reset');
-                swal({
-                    title: "Correcto",
-                    text: "Ticket agregado exitosamente",
-                    type: "success",
-                    confirmButtonClass: "btn-succcess"
-                });
+            var totalfiles = $('#fileElem').val().length;
+            for (var i = 0; i < totalfiles; i++){
+                formData.append("files[]", $('#fileElem')[0].files[i]);
             }
-        });
+
+            $.ajax({
+                url: "../../controller/ticket.php?op=guardar",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+
+                success: function(datos){
+                    $('#id_uniadmin').val('');
+                    $('#id_categoria').val('');
+                    $('#titulo_ticket').val('');
+                    $('#ticket_descripcion').summernote('reset');
+                    swal({
+                        title: "Correcto",
+                        text: "Ticket agregado exitosamente",
+                        type: "success",
+                        confirmButtonClass: "btn-succcess"
+                    });
+                }
+            });
     }
 }
 

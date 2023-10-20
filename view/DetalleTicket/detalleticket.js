@@ -24,16 +24,101 @@ $(document).ready(function(){
             onPaste: function (e) {
                 console.log("Text detect...");
             }
-        }
+        },
+        toolbar: [
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['font', ['strikethrough', 'superscript', 'subscript']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']]
+        ]
         
     });
 
     $('#descripcion_usu').summernote({
         height: 400,
         lang: "es-ES",
+        popover: {
+            image: [],
+            link: [],
+            air: []
+        },
+        callbacks: {
+            onImageUpload: function(image) {
+                console.log("Image detect...");
+                myimagetreat(image[0]);
+            },
+            onPaste: function (e) {
+                console.log("Text detect...");
+            }
+        },
+        toolbar: [
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['font', ['strikethrough', 'superscript', 'subscript']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']]
+        ]
+        
+        
     });
 
     $('#descripcion_usu').summernote('disable');
+
+    tabla=$('#documentos_data').dataTable({
+        "aProcessing": true,
+        "aServerSide": true,
+        dom: 'Bfrtip',
+        "searching": true,
+        lengthChange: false,
+        colReorder: true,
+        buttons: [
+                'copyHtml5',
+                'excelHtml5',
+                'csvHtml5',
+                'pdfHtml5'
+                ],
+        "ajax":{
+            url: '../../controller/documento.php?op=listar',
+            type : "post",
+            data : {ticket_id:ticket_id},
+            dataType : "json",
+            error: function(e){
+                console.log(e.responseText);
+            }
+        },
+        "bDestroy": true,
+        "responsive": true,
+        "bInfo":true,
+        "iDisplayLength": 10,
+        "autoWidth": false,
+        "language": {
+            "sProcessing":     "Procesando...",
+            "sLengthMenu":     "Mostrar _MENU_ registros",
+            "sZeroRecords":    "No se encontraron resultados",
+            "sEmptyTable":     "Ningún dato disponible en esta tabla",
+            "sInfo":           "Mostrando un total de _TOTAL_ registros",
+            "sInfoEmpty":      "Mostrando un total de 0 registros",
+            "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix":    "",
+            "sSearch":         "Buscar:",
+            "sUrl":            "",
+            "sInfoThousands":  ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst":    "Primero",
+                "sLast":     "Último",
+                "sNext":     "Siguiente",
+                "sPrevious": "Anterior"
+            },
+            "oAria": {
+                "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            }
+        }
+    }).DataTable();
 });
 
 var getUrlParameter = function getUrlParameter(sParam) {

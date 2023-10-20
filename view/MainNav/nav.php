@@ -28,7 +28,7 @@ if ($_SESSION["id_rol"] == 1) {
     </nav>
     <?php
 } elseif ($_SESSION["id_rol"] == 2 || $_SESSION["id_rol"] == 3) {
-    // Lógica común para el rol de Soporte (2) y Administrador (3)
+
     ?>
     <nav class="side-menu">
         <ul class="side-menu-list">
@@ -45,7 +45,7 @@ if ($_SESSION["id_rol"] == 1) {
                 </a>
             </li>
             <?php
-            // Lógica adicional para el rol de Administrador (3)
+
             if ($_SESSION["id_rol"] == 3) {
                 ?>
                 <li class="blue-dirty">

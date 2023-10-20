@@ -40,6 +40,12 @@
 
             <div class="box-typical box-typical-padding">
                 <div class="row">
+                <div class="col-lg-12">
+                    <fieldset class="form-group">
+                        <label class="form-label semibold" for="titulo_ticket">Asunto</label>
+                        <input type="text" class="form-control" id="titulo_ticket" name="titulo_ticket" readonly>
+                    </fieldset>
+                </div>
                 <div class="col-lg-4">
                     <fieldset class="form-group">
                         <label class="form-label semibold" for="id_uniadmin">Unidad Administrativa</label>
@@ -52,10 +58,20 @@
                         <input type="text" class="form-control" id="id_categoria" name="id_categoria" readonly>
                     </fieldset>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-12">
                     <fieldset class="form-group">
-                        <label class="form-label semibold" for="titulo_ticket">Asunto</label>
-                        <input type="text" class="form-control" id="titulo_ticket" name="titulo_ticket" readonly>
+                        <label class="form-label semibold" for="id_categoria">Archivos Adjuntos</label>
+                        <table id="documentos_data" class="table table-bordered table-striped table-vcenter js-dataTable-full">
+                            <thead>
+                                <tr>
+                                    <th style="width: 90%;">Nombre</th>
+                                    <th class="text-center" style="width: 10%;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
                     </fieldset>
                 </div>
                 <div class="col-lg-12">

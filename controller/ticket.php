@@ -7,10 +7,41 @@
     require_once("../models/Usuario.php");
     $usuario = new Usuario();
 
+    require_once("../models/Documento.php");
+    $documento = new Documento();
+
     switch($_GET["op"]){
 
         case "guardar":
-            $ticket->CrearTicket($_POST["user_id"],$_POST["id_uniadmin"],$_POST["id_categoria"],$_POST["titulo_ticket"],$_POST["descripcion"]);
+            $datos=$ticket->CrearTicket($_POST["user_id"],$_POST["id_uniadmin"],$_POST["id_categoria"],$_POST["titulo_ticket"],$_POST["descripcion"]);
+            if (is_array($datos) == true and count($datos) > 0){
+                foreach ($datos as $row){
+                    $output['ticket_id'] = $row['ticket_id'];
+
+                    if($_FILES['files']['name'] == 0){
+
+                    } else {
+                        $countfiles = count($_FILES['files']['name']);
+                        $ruta = "../public/document/".$output['ticket_id']."/";
+                        $files_arr = array();
+
+                        if(!file_exists($ruta)){
+                            mkdir($ruta, 0777, true);
+                        }
+
+                        for ($index = 0; $index < $countfiles; $index++){
+                            $doc1 = $_FILES['files']['tmp_name'][$index];
+
+                            $destino = $ruta.$_FILES['files']['name'][$index];
+
+                            $documento->insertar_documento($output['ticket_id'], $_FILES['files']['name'][$index]);
+
+                            move_uploaded_file($doc1, $destino);
+                        }
+                    }
+                }
+            }
+            echo json_encode($datos);
         break;
 
         case "actualizar":
