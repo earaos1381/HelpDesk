@@ -3,10 +3,17 @@ var user_id = $('#usuario_id').val();
 var rolID = $('#id_roluser').val();
 
 function init(){
+    $("#ticket_form").on("submit", function(e){
+        guardar(e);
+    });
 
 }
 
 $(document).ready(function(){
+
+    $.post("../../controller/usuario.php?op=combo", function(data) { 
+        $('#user_asig').html(data);
+    });
 
     if(rolID == 1){
         tabla = $('#ticket_data').dataTable({
@@ -121,6 +128,42 @@ function ver(ticket_id){ //modificaciones
         var nuevaVentana = window.open('http://localhost/mesaayuda/view/DetalleTicket/?id='+ ticket_id +'');
 
         window.close();
+}
+
+function asignar (ticket_id){
+    $.post("../../controller/ticket.php?op=mostrar",{ticket_id : ticket_id}, function(data) { 
+        data = JSON.parse(data);
+        $('#ticket_id').val(data.ticket_id);
+
+        $('#mdltitulo').html('Asignar Soporte');
+        $('#modalasignar').modal('show');
+    });
+    
+}
+
+function guardar(e){
+    e.preventDefault();
+	var formData = new FormData($("#ticket_form")[0]);
+    $.ajax({
+        url: "../../controller/ticket.php?op=asignar",
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(datos){    
+            console.log(datos);
+
+            $("#modalasignar").modal('hide');
+            $('#ticket_data').DataTable().ajax.reload();
+
+            swal({
+                title: "Ticket Asignado!",
+                text: "Completado.",
+                type: "success",
+                confirmButtonClass: "btn-success"
+            });
+        }
+    }); 
 }
  
 init();

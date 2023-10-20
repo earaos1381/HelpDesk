@@ -45,7 +45,7 @@
                             <th style="width: 5%;">Nombre</th>
                             <th style="width: 5%;">Apellido</th>
                             <th class="d-none d-sm-table-cell" style="width: 10%;">Correo Electrónico</th>
-                            <th class="d-none d-sm-table-cell" style="width: 10%;">Contraseña</th>
+                            <!-- <th class="d-none d-sm-table-cell" style="width: 10%;">Contraseña</th> -->
                             <th style="width: 5%;">Tipo de Usuario</th>
                             <th style="width: 5%;"></th>
                             <th style="width: 5%;"></th>

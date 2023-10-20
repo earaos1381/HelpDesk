@@ -31,9 +31,10 @@
                         <select class="select2" id="id_rol" name="id_rol" required>
                             <option value="1">Usuario</option>
                             <option value="2">Soporte</option>
+                            <option value="3">Administrador</option>
                         </select>
                     </div>
-                    
+
                 </div>
 
                 <div class="modal-footer">

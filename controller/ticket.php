@@ -4,6 +4,9 @@
     
     $ticket = new Ticket();
 
+    require_once("../models/Usuario.php");
+    $usuario = new Usuario();
+
     switch($_GET["op"]){
 
         case "guardar":
@@ -13,6 +16,11 @@
         case "actualizar":
             $ticket->actualizarTicket($_POST["ticket_id"]);
             $ticket->InsertarTicketDetalleCerrado($_POST["ticket_id"],$_POST["user_id"]);
+            
+        break;
+
+        case "asignar":
+            $ticket->actualizarTicketAsignacion($_POST["user_asig"] ,$_POST["ticket_id"]);
             
         break;
 
@@ -33,6 +41,22 @@
                 }
 
                 $sub_array[] = date("d/m/Y - H:i:s", strtotime($row["fecha_create"]));
+
+                if($row["fech_asig"] == NULL){
+                    $sub_array[] = '<span class="label label-pill label-default">Sin Asignar</span>';
+                } else {
+                    $sub_array[] = date("d/m/Y - H:i:s", strtotime($row["fech_asig"]));
+                }
+
+                if($row["user_asig"] == NULL){
+                    $sub_array[] = '<span class="label label-pill label-warning">Sin asignar</span>';
+                } else {
+                    $datos1 = $usuario->obtenerUsuarioId($row["user_asig"]);
+                    foreach ($datos1 as $row1){
+                        $sub_array[] = '<span class="label label-pill label-success">'. $row1["user_nom"] .'</span>';
+                    }
+                }
+
                 $sub_array[] ='<button type="button" onClick="ver('.$row["ticket_id"].');" id="'.$row["ticket_id"].'" class="btn btn-inline btn-primary btn-sm ladda-button"><i class="fa fa-eye"></i></button>';
                 $data[] = $sub_array;
             }
@@ -62,6 +86,22 @@
                 }
                 
                 $sub_array[] = date("d/m/Y - H:i:s", strtotime($row["fecha_create"]));
+
+                if($row["fech_asig"] == NULL){
+                    $sub_array[] = '<span class="label label-pill label-default">Sin Asignar</span>';
+                } else {
+                    $sub_array[] = date("d/m/Y - H:i:s", strtotime($row["fech_asig"]));
+                }
+
+                if($row["user_asig"] == NULL){
+                    $sub_array[] = '<a onClick="asignar('.$row["ticket_id"].');"><span class="label label-pill label-warning">Sin asignar</span></a>';
+                } else {
+                    $datos1 = $usuario->obtenerUsuarioId($row["user_asig"]);
+                    foreach ($datos1 as $row1){
+                        $sub_array[] = '<span class="label label-pill label-success">'. $row1["user_nom"] . ' ' . $row1["user_ap"] .'</span>';
+                    }
+                }
+
                 $sub_array[] ='<button type="button" onClick="ver('.$row["ticket_id"].');" id="'.$row["ticket_id"].'" class="btn btn-inline btn-primary btn-sm ladda-button"><i class="fa fa-eye"></i></button>';
                 $data[] = $sub_array;
             }
@@ -190,7 +230,6 @@
             $datos=$ticket->obtenerTicketGrafico();  
             echo json_encode($datos);
         break;
-
 
     }
 

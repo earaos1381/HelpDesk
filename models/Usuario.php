@@ -14,7 +14,7 @@
                     header("Location:".conectar::ruta()."index.php?m=2");
                     exit();
                 }else{
-                    $sql = "SELECT * FROM users WHERE user_correo = ? AND user_password = ? AND id_rol = ? AND estado = 1";
+                    $sql = "call sp_login(?,?,?)";
                     $stmt = $conectar->prepare($sql);
                     $stmt->bindValue(1, $correo);
                     $stmt->bindValue(2, $password);
@@ -82,6 +82,15 @@
             $conectar=parent::conexion();
             parent::set_names();
                 $sql = "call sp_listar_usuario";
+            $sql = $conectar->prepare($sql);
+            $sql->execute();
+            return $resultado = $sql->fetchAll();
+        }
+
+        public function obtenerUsuarioPorRol(){
+            $conectar=parent::conexion();
+            parent::set_names();
+                $sql = "call sp_listar_usuario_roll";
             $sql = $conectar->prepare($sql);
             $sql->execute();
             return $resultado = $sql->fetchAll();

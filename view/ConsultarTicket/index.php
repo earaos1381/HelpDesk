@@ -43,9 +43,11 @@
                             <th style="width: 5%;">No. Ticket</th>
                             <th style="width: 15%;">Unidad Administrativa</th>
                             <th style="width: 15%;">Categoria</th>
-                            <th class="d-none d-sm-table-cell" style="width: 40%;">Asunto</th>
-                            <th class="d-none d-sm-table-cell" style="width: 5%;">Estado</th>
+                            <th style="width: 40%;">Asunto</th>
+                            <th style="width: 5%;">Estado</th>
                             <th style="width: 10%;">Fecha de Creación</th>
+                            <th style="width: 5%;">Fecha de Asignación</th>
+                            <th style="width: 10%;">Soporte</th>
                             <th style="width: 5%;"></th>
                         </tr>
                     </thead>
@@ -62,6 +64,7 @@
 
     <!-- Contenido -->
 
+    <?php require_once("modalasignar.php");?>
     <?php require_once("../MainJS/js.php");?>
     <script type="text/javascript" src="consultarticket.js"></script>
 </body>

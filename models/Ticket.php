@@ -96,6 +96,17 @@
             return $resultado=$sql->fetchAll();
         }
 
+        public function actualizarTicketAsignacion($user_asig ,$ticket_id){
+            $conectar= parent::conexion();
+            parent::set_names();
+            $sql="call sp_actualizar_ticket_asignacion(?,?)";
+            $sql=$conectar->prepare($sql);
+            $sql->bindValue(1, $user_asig);
+            $sql->bindValue(2, $ticket_id);
+            $sql->execute();
+            return $resultado=$sql->fetchAll();
+        }
+
         public function obtenerTicket(){
             $conectar=parent::conexion();
             parent::set_names();

@@ -7,9 +7,9 @@
     switch($_GET["op"]){
         case "guardaryeditar":
             if(empty($_POST["user_id"])){
-                /* if(is_array($datos) == true and count($datos) == 0){ */
+
                     $usuario->crearUsuario($_POST["user_nom"],$_POST["user_ap"],$_POST["user_correo"],$_POST["user_password"],$_POST["id_rol"]);
-                /* } */
+
             } else {
                 $usuario->actualizarUsuario($_POST["user_id"],$_POST["user_nom"],$_POST["user_ap"],$_POST["user_correo"],$_POST["user_password"],$_POST["id_rol"]);
             }
@@ -17,32 +17,38 @@
 
         case "listar":
             $datos = $usuario->obtenerUsuario();
-            $data= Array();
-            foreach($datos as $row){
-                $sub_array = array(); //Columnas
+            $data = Array();
+            foreach ($datos as $row) {
+                $sub_array = array(); // Columnas
                 $sub_array[] = $row["user_nom"];
                 $sub_array[] = $row["user_ap"];
                 $sub_array[] = $row["user_correo"];
-                $sub_array[] = $row["user_password"];
-
-                if($row["id_rol"] == "1"){
+                /* $sub_array[] = $row["user_password"]; */
+        
+                if ($row["id_rol"] == "1") {
                     $sub_array[] = '<span class="label label-pill label-success">Usuario</span>';
-                } else {
+                } elseif ($row["id_rol"] == "2") {
                     $sub_array[] = '<span class="label label-pill label-info">Soporte</span>';
+                } elseif ($row["id_rol"] == "3") {
+                    $sub_array[] = '<span class="label label-pill label-warning">Administrador</span>';
+                } else {
+                    $sub_array[] = '<span class="label label-pill label-default">Rol Desconocido</span>';
                 }
-                
-                $sub_array[] ='<button type="button" onClick="editar('.$row["user_id"].');" id="'.$row["user_id"].'" class="btn btn-inline btn-warning btn-sm ladda-button"><i class="fa fa-edit"></i></button>';
-                $sub_array[] ='<button type="button" onClick="eliminar('.$row["user_id"].');" id="'.$row["user_id"].'" class="btn btn-inline btn-danger btn-sm ladda-button"><i class="fa fa-trash"></i></button>';
+        
+                $sub_array[] = '<button type="button" onClick="editar(' . $row["user_id"] . ');" id="' . $row["user_id"] . '" class="btn btn-inline btn-warning btn-sm ladda-button"><i class="fa fa-edit"></i></button>';
+                $sub_array[] = '<button type="button" onClick="eliminar(' . $row["user_id"] . ');" id="' . $row["user_id"] . '" class="btn btn-inline btn-danger btn-sm ladda-button"><i class="fa fa-trash"></i></button>';
                 $data[] = $sub_array;
             }
-
+        
             $results = array(
-                "sEcho"=>1,
-                "iTotalRecords"=>count($data),
-                "itotalDisplayRecords"=>count($data),
-                "aaData"=>$data);
-            echo json_encode($results);    
-        break;
+                "sEcho" => 1,
+                "iTotalRecords" => count($data),
+                "itotalDisplayRecords" => count($data),
+                "aaData" => $data,
+            );
+            echo json_encode($results);
+            break;
+            
 
         case "eliminar":
             $usuario->eliminarUsuario($_POST["user_id"]);
@@ -100,6 +106,18 @@
         case "grafico";
             $datos=$usuario->obtenerUsuarioGrafico($_POST["user_id"]);  
             echo json_encode($datos);
+        break;
+
+        case "combo";
+            $datos = $usuario->obtenerUsuarioPorRol(); 
+            if(is_array($datos) == true and count($datos) > 0){
+                $html.= "<option label = 'Seleccionar'></option>";
+                foreach($datos as $row)
+                {
+                    $html.= "<option value='".$row['user_id']."'>".$row['user_nom']."</option>";
+                }
+                echo $html;
+            }
         break;
     }
 ?>
