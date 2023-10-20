@@ -39,13 +39,42 @@
             return $resultado = $sql->fetchAll();
         }
 
-        public function ListarTicket(){
+        public function ListarTicket($id_rol){
             $conectar= parent::conexion();
             parent::set_names();
-            $sql = "call sp_listar_ticket";
-            $sql=$conectar->prepare($sql);
+            $sql = "SELECT
+            tickets.ticket_id, 
+            tickets.user_id,
+            tickets.id_uniadmin, 
+            tickets.id_categoria, 
+            tickets.titulo_ticket, 
+            tickets.descripcion,
+            tickets.estado_ticket, 
+            tickets.fecha_create,
+            tickets.user_asig,
+            tickets.fech_asig, 
+            users.user_nom, 
+            users.user_ap, 
+            categorias.cat_descripcion,
+            unidadesadmin.uni_descripcion  
+            FROM tickets
+            INNER JOIN unidadesadmin ON tickets.id_uniadmin = unidadesadmin.id_uniadmin
+            INNER JOIN categorias ON tickets.id_categoria = categorias.cat_id
+            INNER JOIN users ON tickets.user_id = users.user_id
+            WHERE tickets.estado = 1";
+
+            if ($id_rol == 2) {
+                $sql .= " AND tickets.user_asig = :user_id";
+            }
+
+            $sql = $conectar->prepare($sql);
+
+            if ($id_rol == 2) {
+                $sql->bindParam(":user_id", $_SESSION["user_id"], PDO::PARAM_INT);
+            }
+
             $sql->execute();
-            return $resultado=$sql->fetchAll();
+            return $resultado = $sql->fetchAll();
         }
 
         public function DetalleTicket($ticket_id){

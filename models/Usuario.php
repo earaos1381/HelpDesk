@@ -87,7 +87,7 @@
             return $resultado = $sql->fetchAll();
         }
 
-        public function obtenerUsuarioPorRol(){
+        public function obtenerUsuarioPorRol(){//para obtener solo los roles de soporte
             $conectar=parent::conexion();
             parent::set_names();
                 $sql = "call sp_listar_usuario_roll";

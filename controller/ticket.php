@@ -24,7 +24,7 @@
             
         break;
 
-        case "listarUser":
+        case "listarUser": //lista ticker de usuario normal
             $datos = $ticket->ListarTicketPorUser($_POST["user_id"]);
             $data= Array();
             foreach($datos as $row){
@@ -53,7 +53,7 @@
                 } else {
                     $datos1 = $usuario->obtenerUsuarioId($row["user_asig"]);
                     foreach ($datos1 as $row1){
-                        $sub_array[] = '<span class="label label-pill label-success">'. $row1["user_nom"] .'</span>';
+                        $sub_array[] = '<span class="label label-pill label-success">'. $row1["user_nom"] .' '. $row1["user_ap"] .'</span>';
                     }
                 }
 
@@ -69,8 +69,8 @@
             echo json_encode($results);    
         break;
 
-        case "listar":
-            $datos = $ticket->ListarTicket();
+        case "listar": //listar por rol
+            $datos = $ticket->ListarTicket($_SESSION["id_rol"]);
             $data= Array();
             foreach($datos as $row){
                 $sub_array = array(); //Columnas
