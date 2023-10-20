@@ -34,22 +34,22 @@ $(document).ready(function () {
             });
         });
     } else if (id_rol === "2") {
-        $.post("../../controller/ticket.php?op=total", function (data) {
+        $.post("../../controller/ticket.php?op=totalsoporteporusuario", { user_id: user_id }, function (data) {
             data = JSON.parse(data);
             $('#lbltotal').html(data.TOTAL);
         });
 
-        $.post("../../controller/ticket.php?op=totalabierto", function (data) {
+        $.post("../../controller/ticket.php?op=totalabiertosoporteporusuario", { user_id: user_id }, function (data) {
             data = JSON.parse(data);
             $('#lbltotalabiertos').html(data.TOTAL);
         });
 
-        $.post("../../controller/ticket.php?op=totalcerrado", function (data) {
+        $.post("../../controller/ticket.php?op=totalcerradosoporteporusuario", { user_id: user_id }, function (data) {
             data = JSON.parse(data);
             $('#lbltotalcerrados').html(data.TOTAL);
         });
 
-        $.post("../../controller/ticket.php?op=grafico", function (data) {
+        $.post("../../controller/ticket.php?op=graficosoporteporusuario", { user_id: user_id }, function (data) {
             data = JSON.parse(data);
 
             new Morris.Bar({

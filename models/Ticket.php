@@ -172,5 +172,57 @@
             return $resultado=$sql->fetchAll();
         }
 
+        public function obtenerTotalSoportePorUsuario($user_id){
+            $conectar = parent::conexion();
+            parent::set_names();
+            $sql = "SELECT COUNT(*) AS TOTAL
+                    FROM tickets
+                    WHERE user_asig = :user_id";
+            $sql = $conectar->prepare($sql);
+            $sql->bindParam(":user_id", $user_id, PDO::PARAM_INT);
+            $sql->execute();
+            return $resultado = $sql->fetchAll();
+        }
+        
+        public function obtenerTotalAbiertoSoportePorUsuario($user_id){
+            $conectar = parent::conexion();
+            parent::set_names();
+            $sql = "SELECT COUNT(*) AS TOTAL
+                    FROM tickets
+                    WHERE estado_ticket = 'Abierto' AND user_asig = :user_id";
+            $sql = $conectar->prepare($sql);
+            $sql->bindParam(":user_id", $user_id, PDO::PARAM_INT);
+            $sql->execute();
+            return $resultado = $sql->fetchAll();
+        }
+        
+        public function obtenerTotalCerradoSoportePorUsuario($user_id){
+            $conectar = parent::conexion();
+            parent::set_names();
+            $sql = "SELECT COUNT(*) AS TOTAL
+                    FROM tickets
+                    WHERE estado_ticket = 'Cerrado' AND user_asig = :user_id";
+            $sql = $conectar->prepare($sql);
+            $sql->bindParam(":user_id", $user_id, PDO::PARAM_INT);
+            $sql->execute();
+            return $resultado = $sql->fetchAll();
+        }
+        
+        public function obtenerGraficoSoportePorUsuario($user_id){
+            $conectar = parent::conexion();
+            parent::set_names();
+            $sql = "SELECT categorias.cat_descripcion as nom, COUNT(*) AS total
+                    FROM tickets
+                    JOIN categorias ON tickets.id_categoria = categorias.cat_id
+                    WHERE tickets.estado = 1 AND tickets.user_asig = :user_id
+                    GROUP BY categorias.cat_descripcion 
+                    ORDER BY total DESC";
+            $sql = $conectar->prepare($sql);
+            $sql->bindParam(":user_id", $user_id, PDO::PARAM_INT);
+            $sql->execute();
+            return $resultado = $sql->fetchAll();
+        }
+        
+
     }
 ?>

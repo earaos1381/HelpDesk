@@ -231,6 +231,49 @@
             echo json_encode($datos);
         break;
 
+        case "totalsoporteporusuario":
+            $user_id = $_POST['user_id'];
+            $datos = $ticket->obtenerTotalSoportePorUsuario($user_id);
+            if (is_array($datos) == true and count($datos) > 0){
+                foreach($datos as $row)
+                {
+                    $output["TOTAL"] = $row["TOTAL"];
+                }
+                echo json_encode($output);
+            }
+        break;
+        
+        case "totalabiertosoporteporusuario":
+            $user_id = $_POST['user_id'];
+            $datos = $ticket->obtenerTotalAbiertoSoportePorUsuario($user_id);
+            if (is_array($datos) == true and count($datos) > 0){
+                foreach($datos as $row)
+                {
+                    $output["TOTAL"] = $row["TOTAL"];
+                }
+                echo json_encode($output);
+            }
+        break;
+        
+        case "totalcerradosoporteporusuario":
+            $user_id = $_POST['user_id'];
+            $datos = $ticket->obtenerTotalCerradoSoportePorUsuario($user_id);
+            if (is_array($datos) == true and count($datos) > 0){
+                foreach($datos as $row)
+                {
+                    $output["TOTAL"] = $row["TOTAL"];
+                }
+                echo json_encode($output);
+            }
+        break;
+        
+        case "graficosoporteporusuario":
+            $user_id = $_POST['user_id'];
+            $datos = $ticket->obtenerGraficoSoportePorUsuario($user_id);
+            echo json_encode($datos);
+        break;
+        
+
     }
 
 ?>
