@@ -6,7 +6,7 @@
             $conectar=parent::conexion();
             parent::set_names();
 
-            $sql = "SELECT * FROM unidadesadmin WHERE estado = 1";
+            $sql = "call sp_obtener_uniAdmin";
             $sql = $conectar->prepare($sql);
             $sql->execute();
 

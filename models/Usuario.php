@@ -42,18 +42,7 @@
             
             $conectar=parent::conexion();
             parent::set_names();
-            $sql = "INSERT INTO mesaayuda.users (
-                    user_id,
-                    user_nom,
-                    user_ap,
-                    user_correo,
-                    user_password,
-                    id_rol,
-                    fecha_create,
-                    fecha_update,
-                    fecha_elim,
-                    estado) 
-                    VALUES (NULL, ?, ?, ?, ?, ?, now(), NULL, NULL, '1');";
+            $sql = "call sp_insertar_usuario(?,?,?,?,?)";
             $sql = $conectar->prepare($sql);
             $sql->bindValue(1, $user_nom);
             $sql->bindValue(2, $user_ap);
@@ -64,16 +53,10 @@
             return $resultado = $sql->fetchAll();
         }
 
-        public function actualizarUsuario($user_id, $user_nom, $user_ap, $user_correo, $user_password, $id_rol){
+        public function actualizarUsuario($user_nom, $user_ap, $user_correo, $user_password, $id_rol, $user_id,){
             $conectar=parent::conexion();
             parent::set_names();
-            $sql = "UPDATE users SET
-                    user_nom = ?,
-                    user_ap = ?,
-                    user_correo = ?,
-                    user_password = ?,
-                    id_rol = ?
-                    WHERE user_id = ?";
+            $sql = "call sp_actualizar_usuario(?,?,?,?,?,?)";
             $sql = $conectar->prepare($sql);
             $sql->bindValue(1, $user_nom);
             $sql->bindValue(2, $user_ap);
@@ -88,10 +71,7 @@
         public function eliminarUsuario($user_id){
             $conectar=parent::conexion();
             parent::set_names();
-            $sql = "UPDATE mesaayuda.users
-                    SET estado = '0',
-                        fecha_elim = now()
-                    WHERE user_id = ?";
+            $sql = "call sp_eliminar_usuario(?)";
             $sql = $conectar->prepare($sql);
             $sql->bindValue(1, $user_id);
             $sql->execute();
@@ -101,9 +81,7 @@
         public function obtenerUsuario(){
             $conectar=parent::conexion();
             parent::set_names();
-            $sql = "SELECT *
-                    FROM users
-                    WHERE estado = '1'";
+                $sql = "call sp_listar_usuario";
             $sql = $conectar->prepare($sql);
             $sql->execute();
             return $resultado = $sql->fetchAll();
@@ -112,9 +90,7 @@
         public function obtenerUsuarioId($user_id){
             $conectar=parent::conexion();
             parent::set_names();
-            $sql = "SELECT *
-                    FROM users
-                    WHERE user_id = ?";
+                $sql = "call sp_listar_usuarioID(?)";
             $sql = $conectar->prepare($sql);
             $sql->bindValue(1, $user_id);
             $sql->execute();
@@ -124,9 +100,7 @@
         public function obtenerUsuarioTicketId($user_id){
             $conectar=parent::conexion();
             parent::set_names();
-            $sql = "SELECT COUNT(*) AS TOTAL
-                    FROM tickets
-                    WHERE user_id = ?";
+            $sql = "call sp_obtener_usuario_ticketID(?)";
             $sql = $conectar->prepare($sql);
             $sql->bindValue(1, $user_id);
             $sql->execute();
@@ -136,10 +110,7 @@
         public function obtenerUsuarioTicketAbiertoId($user_id){
             $conectar=parent::conexion();
             parent::set_names();
-            $sql = "SELECT COUNT(*) AS TOTAL
-                    FROM tickets
-                    WHERE user_id = ? 
-                    AND estado_ticket = 'Abierto'";
+            $sql = "call sp_obtener_usuario_ticketID_abierto(?)";
             $sql = $conectar->prepare($sql);
             $sql->bindValue(1, $user_id);
             $sql->execute();
@@ -149,10 +120,7 @@
         public function obtenerUsuarioTicketCerradoId($user_id){
             $conectar=parent::conexion();
             parent::set_names();
-            $sql = "SELECT COUNT(*) AS TOTAL
-                    FROM tickets
-                    WHERE user_id = ? 
-                    AND estado_ticket = 'Cerrado'";
+            $sql = "call sp_obtener_usuario_ticketID_cerrado(?)";
             $sql = $conectar->prepare($sql);
             $sql->bindValue(1, $user_id);
             $sql->execute();
@@ -162,15 +130,7 @@
         public function obtenerUsuarioGrafico($user_id){
             $conectar= parent::conexion();
             parent::set_names();
-            $sql="SELECT categorias.cat_descripcion as nom,COUNT(*) AS total
-                FROM   tickets  JOIN  
-                categorias ON tickets.id_categoria = categorias.cat_id  
-                WHERE
-                tickets.estado = 1
-                AND tickets.user_id = ?
-                GROUP BY 
-                categorias.cat_descripcion 
-                ORDER BY total DESC";
+            $sql="call sp_obtener_usuario_grafico(?)";
             $sql=$conectar->prepare($sql);
             $sql->bindValue(1, $user_id);
             $sql->execute();
