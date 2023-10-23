@@ -182,6 +182,11 @@ $(document).on("click", "#btcerrarticket", function(){
 
             });
 
+            $.post("../../controller/email.php?op=ticket_cerrado", {ticket_id : ticket_id}, function(data){ 
+
+
+            });
+
             listardetalle(ticket_id);
 
             swal({

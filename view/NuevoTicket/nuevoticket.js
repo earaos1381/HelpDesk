@@ -70,7 +70,15 @@ function guardarEditar(e){
                 contentType: false,
                 processData: false,
 
-                success: function(datos){
+                success: function(data){
+                    data = JSON.parse(data);
+                    console.log(data[0].ticket_id);
+
+                    $.post("../../controller/email.php?op=ticket_abierto", {ticket_id : data[0].ticket_id}, function(data){ 
+
+
+                    });
+
                     $('#id_uniadmin').val('');
                     $('#id_categoria').val('');
                     $('#titulo_ticket').val('');

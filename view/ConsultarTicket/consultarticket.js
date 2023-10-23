@@ -150,11 +150,12 @@ function guardar(e){
         data: formData,
         contentType: false,
         processData: false,
-        success: function(datos){    
-            console.log(datos);
+        success: function(datos){
 
-            $("#modalasignar").modal('hide');
-            $('#ticket_data').DataTable().ajax.reload();
+            var ticket_id = $('#ticket_id').val();
+            $.post("../../controller/email.php?op=ticket_asignado", {ticket_id : ticket_id}, function(data){ 
+
+            });
 
             swal({
                 title: "Ticket Asignado!",
@@ -162,6 +163,10 @@ function guardar(e){
                 type: "success",
                 confirmButtonClass: "btn-success"
             });
+
+            $("#modalasignar").modal('hide');
+            $('#ticket_data').DataTable().ajax.reload();
+
         }
     }); 
 }

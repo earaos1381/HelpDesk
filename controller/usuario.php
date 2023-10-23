@@ -115,7 +115,7 @@
                 $html.= "<option label = 'Seleccionar'></option>";
                 foreach($datos as $row)
                 {
-                    $html.= "<option value='".$row['user_id']."'>".$row['user_nom']."</option>";
+                    $html.= "<option value='".$row['user_id']."'>".$row['user_nom'].' '.$row['user_ap']."</option>";
                 }
                 echo $html;
             }

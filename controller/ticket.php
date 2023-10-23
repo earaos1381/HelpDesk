@@ -13,35 +13,33 @@
     switch($_GET["op"]){
 
         case "guardar":
-            $datos=$ticket->CrearTicket($_POST["user_id"],$_POST["id_uniadmin"],$_POST["id_categoria"],$_POST["titulo_ticket"],$_POST["descripcion"]);
-            if (is_array($datos) == true and count($datos) > 0){
-                foreach ($datos as $row){
-                    $output['ticket_id'] = $row['ticket_id'];
+            $data=$ticket->CrearTicket($_POST["user_id"],$_POST["id_uniadmin"],$_POST["id_categoria"],$_POST["titulo_ticket"],$_POST["descripcion"]);
+            if (is_array($data)==true and count($data)>0){
+                foreach ($data as $row){
+                    $output["ticket_id"] = $row["ticket_id"];
 
-                    if($_FILES['files']['name'] == 0){
-
-                    } else {
+                    if (!empty($_FILES['files']['name'][0])) {
+                        // Verificar que al menos un archivo fue proporcionado
                         $countfiles = count($_FILES['files']['name']);
-                        $ruta = "../public/document/".$output['ticket_id']."/";
+                        $ruta = "../public/document/" . $output["ticket_id"] . "/";
                         $files_arr = array();
-
-                        if(!file_exists($ruta)){
+            
+                        if (!file_exists($ruta)) {
                             mkdir($ruta, 0777, true);
                         }
-
-                        for ($index = 0; $index < $countfiles; $index++){
+            
+                        for ($index = 0; $index < $countfiles; $index++) {
                             $doc1 = $_FILES['files']['tmp_name'][$index];
-
-                            $destino = $ruta.$_FILES['files']['name'][$index];
-
-                            $documento->insertar_documento($output['ticket_id'], $_FILES['files']['name'][$index]);
-
+                            $destino = $ruta . $_FILES['files']['name'][$index];
+            
+                            $documento->insertar_documento($output["ticket_id"], $_FILES['files']['name'][$index]);
+            
                             move_uploaded_file($doc1, $destino);
                         }
                     }
                 }
             }
-            echo json_encode($datos);
+            echo json_encode($data);
         break;
 
         case "actualizar":
