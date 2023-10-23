@@ -170,5 +170,36 @@ function guardar(e){
         }
     }); 
 }
- 
+
+function CambiarEstado (ticket_id){
+
+    swal({
+        title: "Reabrir Ticket",
+        text: "Esta seguro de realizar esta acción?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-warning",
+        confirmButtonText: "Si",
+        cancelButtonText: "No",
+        closeOnConfirm: false
+    },
+    function(isConfirm) {
+        if (isConfirm) {
+            $.post("../../controller/ticket.php?op=reabrir", {ticket_id : ticket_id, user_id : user_id}, function (data) {
+
+            });
+
+            $('#ticket_data').DataTable().ajax.reload();	
+
+            swal({
+                title: "Cambio Realizado!",
+                text: "Ticket Abierto.",
+                type: "success",
+                confirmButtonClass: "btn-success"
+            });
+        }
+    });
+    
+}
+
 init();

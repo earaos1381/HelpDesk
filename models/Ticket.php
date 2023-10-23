@@ -118,10 +118,38 @@
             return $resultado = $sql->fetchAll();
         }
 
+        public function InsertarTicketDetalleReabrir($ticket_id,$user_id){
+            $conectar= parent::conexion();
+            parent::set_names();
+                $sql="	INSERT INTO detalleticket 
+                    (detalleticket_id,ticket_id,user_id,descripcion,fecha_create,estado) 
+                    VALUES 
+                    (NULL,?,?,'-Ticket Re-Abierto-',now(),'1');";
+            $sql=$conectar->prepare($sql);
+            $sql->bindValue(1, $ticket_id);
+            $sql->bindValue(2, $user_id);
+            $sql->execute();
+            return $resultado=$sql->fetchAll();
+        }
+
         public function actualizarTicket($ticket_id){
             $conectar= parent::conexion();
             parent::set_names();
             $sql="call sp_actualizar_ticket(?)";
+            $sql=$conectar->prepare($sql);
+            $sql->bindValue(1, $ticket_id);
+            $sql->execute();
+            return $resultado=$sql->fetchAll();
+        }
+
+        public function reabrirTicket($ticket_id){
+            $conectar= parent::conexion();
+            parent::set_names();
+            $sql="UPDATE tickets 
+                set	
+                    estado_ticket = 'Abierto'
+                where
+                    ticket_id = ?";
             $sql=$conectar->prepare($sql);
             $sql->bindValue(1, $ticket_id);
             $sql->execute();
