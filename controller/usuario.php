@@ -120,5 +120,23 @@
                 echo $html;
             }
         break;
+
+        case "password":
+            /* $cifrado = openssl_encrypt($_POST["user_password"], $cipher, $key, OPENSSL_RAW_DATA, $iv);
+            $textoCifrado = base64_encode($iv . $cifrado);
+
+            $usuario->actualizarPassUsuario($_POST["user_correo"],$textoCifrado); */
+            $usuario->actualizarPassUsuario($_POST["user_id"],$_POST["user_password"]);
+        break;
+
+        /* case "correo":
+            $datos=$usuario->get_usuario_x_correo($_POST["usu_correo"]);
+            if(is_array($datos)==true and count($datos)>0){
+
+                echo "Existe";
+            }else{
+                echo "Error";
+            }
+        break; */
     }
 ?>
