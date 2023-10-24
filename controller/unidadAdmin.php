@@ -8,7 +8,8 @@
         case "combo":
             $datos = $categoria->ObtenerUni();
             $html="";
-            $html = "<option value='-1'>Selecciona una Unidad Administrativa</option>";
+            /* $html = "<option value='-1'>Selecciona una Unidad Administrativa</option>"; */
+            $html .= "<option label='Seleccionar'></option>";
             if(is_array($datos) == true and count($datos) > 0){
                 
                 foreach($datos as $row)

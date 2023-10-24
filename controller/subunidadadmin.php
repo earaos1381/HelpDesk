@@ -9,7 +9,9 @@ switch($_GET["op"]){
         $id_uniadmin = $_POST['id_uniadmin'];
         $datos = $subunidadadmin->ObtenerSubuni($id_uniadmin);
         $html="";
-        $html = "<option value='-1'>Selecciona una SubCategoria</option>";
+        /* $html = "<option value='-1'>Selecciona una SubCategoria</option>" */;
+
+        $html .= "<option label='Seleccionar'></option>";
 
 
         if(is_array($datos) == true and count($datos) > 0){

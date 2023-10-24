@@ -37,28 +37,71 @@
 			</header>
 
             <div class="box-typical box-typical-padding">
-                <table id="ticket_data" class="table table-bordered table-striped table-vcenter js-dataTable-full">
-                    <thead>
-                        <tr>
-                            <th style="width: 5%;">#</th>
-                            <th style="width: 15%;">Unidad Administrativa</th>
-                            <th style="width: 15%;">Categoria</th>
-                            <th style="width: 40%;">Asunto</th>
-                            <th style="width: 5%;">Prioridad</th>
-                            <th style="width: 5%;">Estado</th>
-                            <th style="width: 5%;">Fecha de Creación</th>
-                            <th style="width: 5%;">Fecha de Asignación</th>
-                            <th style="width: 5%;">Fecha de Cierre</th>
-                            <th style="width: 10%;">Soporte</th>
-                            <th style="width: 5%;"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
+            <div class="row" id="viewuser">
+					<div class="col-lg-3">
+						<fieldset class="form-group">
+							<label class="form-label" for="titulo_ticket">Titulo</label>
+							<input type="text" class="form-control" id="titulo_ticket" name="titulo_ticket" placeholder="Ingrese Titulo" required>
+						</fieldset>
+					</div>
 
-                    </tbody>
-                </table>
-                
+					<div class="col-lg-3">
+						<fieldset class="form-group">
+							<label class="form-label" for="id_categoria">Categoria</label>
+							<select class="select2" id="id_categoria" name="id_categoria" data-placeholder="Selecciona una Categoria">
+								<option label="Seleccionar"></option>
 
+							</select>
+						</fieldset>
+					</div>
+
+					<div class="col-lg-2">
+						<fieldset class="form-group">
+							<label class="form-label" for="id_prioridad">Prioridad</label>
+							<select class="select2" id="id_prioridad" name="id_prioridad" data-placeholder="Seleccionar una Prioridad">
+								<option label="Seleccionar"></option>
+
+							</select>
+						</fieldset>
+					</div>
+
+					<div class="col-lg-2">
+						<fieldset class="form-group">
+							<label class="form-label" for="btnfiltrar">&nbsp;</label>
+							<button type="submit" class="btn btn-rounded btn-primary btn-block" id="btnfiltrar">Filtrar</button>
+						</fieldset>
+					</div>
+
+					<div class="col-lg-2">
+						<fieldset class="form-group">
+							<label class="form-label" for="btntodo">&nbsp;</label>
+							<button class="btn btn-rounded btn-primary btn-block" id="btntodo">Ver Todo</button>
+						</fieldset>
+					</div>
+				</div>
+
+                <div class="box-typical box-typical-padding" id="table">
+					<table id="ticket_data" class="table table-bordered table-striped table-vcenter js-dataTable-full">
+						<thead>
+							<tr>
+								<th style="width: 5%;">#</th>
+								<th style="width: 15%;">Unidad Administrativa</th>
+								<th style="width: 15%;">Categoria</th>
+								<th style="width: 40%;">Asunto</th>
+								<th style="width: 5%;">Prioridad</th>
+								<th style="width: 5%;">Estado</th>
+								<th style="width: 5%;">Fecha de Creación</th>
+								<th style="width: 5%;">Fecha de Asignación</th>
+								<th style="width: 5%;">Fecha de Cierre</th>
+								<th style="width: 10%;">Soporte</th>
+								<th style="width: 5%;"></th>
+							</tr>
+						</thead>
+						<tbody>
+
+						</tbody>
+					</table>
+				</div>
             </div>
 
 		</div>

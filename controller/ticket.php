@@ -135,9 +135,96 @@
             echo json_encode($results);    
         break;
 
-        case "listar": //listar por rol
+        case "listar": //listar por rol - ESTE FUNCIONA PERO SERA HISTORICO
             $datos = $ticket->ListarTicket($_SESSION["id_rol"]);
             $data= Array();
+            foreach($datos as $row){
+                $sub_array = array(); //Columnas
+                $sub_array[] = $row["ticket_id"];
+                $sub_array[] = $row["uni_descripcion"];
+                $sub_array[] = $row["cat_descripcion"];
+                $sub_array[] = $row["titulo_ticket"];
+
+                $priority_label = '';
+                switch ($row["prio_descrip"]) {
+                    case 'Alta':
+                        $priority_label = '<span class="label label-pill label-danger">Alta</span>';
+                        break;
+                    case 'Media':
+                        $priority_label = '<span class="label label-pill label-warning">Media</span>';
+                        break;
+                    case 'Baja':
+                        $priority_label = '<span class="label label-pill label-primary">Baja</span>';
+                        break;
+                    default:
+                        $priority_label = $row["prio_descrip"]; 
+                }
+                $sub_array[] = $priority_label;
+
+                if($row["estado_ticket"] == "Abierto"){
+                    $sub_array[] = '<span class="label label-pill label-success">Abierto</span>';
+                } else {
+                    $sub_array[] = '<a onClick="CambiarEstado('.$row["ticket_id"].')"><span class="label label-pill label-danger">Cerrado</span></a>';
+                }
+                
+                $sub_array[] = date("d/m/Y - H:i:s", strtotime($row["fecha_create"]));
+
+                if($row["fech_asig"] == NULL){
+                    $sub_array[] = '<span class="label label-pill label-default">Sin Asignar</span>';
+                } else {
+                    $sub_array[] = date("d/m/Y - H:i:s", strtotime($row["fech_asig"]));
+                }
+
+                if($row["fech_cierre"] == NULL){
+                    $sub_array[] = '<span class="label label-pill label-default">Sin Cerrar</span>';
+                } else {
+                    $sub_array[] = date("d/m/Y - H:i:s", strtotime($row["fech_cierre"]));
+                }
+
+                if($row["user_asig"] == NULL){
+                    $sub_array[] = '<a onClick="asignar('.$row["ticket_id"].');"><span class="label label-pill label-warning">Sin asignar</span></a>';
+                } else {
+                    $datos1 = $usuario->obtenerUsuarioId($row["user_asig"]);
+                    foreach ($datos1 as $row1){
+                        $sub_array[] = '<span class="label label-pill label-success">'. $row1["user_nom"] . ' ' . $row1["user_ap"] .'</span>';
+                    }
+                }
+
+                $sub_array[] ='<button type="button" onClick="ver('.$row["ticket_id"].');" id="'.$row["ticket_id"].'" class="btn btn-inline btn-primary btn-sm ladda-button"><i class="fa fa-eye"></i></button>';
+                $data[] = $sub_array;
+            }
+
+            $results = array(
+                "sEcho"=>1,
+                "iTotalRecords"=>count($data),
+                "itotalDisplayRecords"=>count($data),
+                "aaData"=>$data);
+            echo json_encode($results);    
+        break;
+
+        case "listar_filtro":
+
+            if (isset($_POST["titulo_ticket"])) {
+                $_SESSION["titulo_ticket"] = $_POST["titulo_ticket"];
+            } else {
+                $_SESSION["titulo_ticket"] = "";
+            }
+        
+            if (isset($_POST["id_categoria"])) {
+                $_SESSION["id_categoria"] = $_POST["id_categoria"];
+            } else {
+                $_SESSION["id_categoria"] = "";
+            }
+        
+            if (isset($_POST["id_prioridad"])) {
+                $_SESSION["id_prioridad"] = $_POST["id_prioridad"];
+            } else {
+                $_SESSION["id_prioridad"] = "";
+            }
+        
+            $datos = $ticket->filtrarTicket($_SESSION["titulo_ticket"], $_SESSION["id_categoria"], $_SESSION["id_prioridad"], $_SESSION["id_rol"], $_SESSION["user_id"]);
+            $data = Array();
+        
             foreach($datos as $row){
                 $sub_array = array(); //Columnas
                 $sub_array[] = $row["ticket_id"];

@@ -255,7 +255,72 @@
             $sql->execute();
             return $resultado = $sql->fetchAll();
         }
-        
 
+        public function filtrarTicket($titulo_ticket, $id_categoria, $id_prioridad, $id_rol) {
+            $conectar = parent::conexion();
+            parent::set_names();
+            $sql = "SELECT 
+                    tickets.ticket_id, 
+                    tickets.user_id,
+                    tickets.id_uniadmin,
+                    tickets.subUni_id,
+                    tickets.id_categoria, 
+                    tickets.titulo_ticket, 
+                    tickets.descripcion,
+                    tickets.estado_ticket, 
+                    tickets.fecha_create,
+                    tickets.user_asig,
+                    tickets.fech_asig,
+                    tickets.fech_cierre,
+                    tickets.id_prioridad,
+                    users.user_nom, 
+                    users.user_ap, 
+                    categorias.cat_descripcion,
+                    unidadesadmin.uni_descripcion,
+                    sub_unidadesadmin.subDescripcion,
+                    prioridad.prio_descrip
+                    FROM tickets
+                    INNER JOIN unidadesadmin ON tickets.id_uniadmin = unidadesadmin.id_uniadmin
+                    LEFT JOIN sub_unidadesadmin ON tickets.subUni_id = sub_unidadesadmin.subUni_id
+                    INNER JOIN categorias ON tickets.id_categoria = categorias.cat_id
+                    INNER JOIN prioridad ON tickets.id_prioridad = prioridad.id_prioridad
+                    INNER JOIN users ON tickets.user_id = users.user_id
+                    WHERE tickets.estado = 1";
+        
+            $params = array();
+        
+            if (!empty($titulo_ticket)) {
+                $sql .= " AND tickets.titulo_ticket LIKE ?";
+                $params[] = "%$titulo_ticket%";
+            }
+            if (!empty($id_categoria)) {
+                $sql .= " AND tickets.id_categoria = ?";
+                $params[] = $id_categoria;
+            }
+            if (!empty($id_prioridad)) {
+                $sql .= " AND tickets.id_prioridad = ?";
+                $params[] = $id_prioridad;
+            }
+        
+            if ($id_rol == 2) {
+                $sql .= " AND tickets.user_asig = :user_id";
+            }
+        
+            $sql = $conectar->prepare($sql);
+        
+            foreach ($params as $key => $value) {
+                $paramPosition = $key + 1;
+                $sql->bindValue($paramPosition, $value);
+            }
+        
+            if ($id_rol == 2) {
+                $sql->bindParam(":user_id", $_SESSION["user_id"], PDO::PARAM_INT);
+            }
+        
+            $sql->execute();
+            return $resultado = $sql->fetchAll();
+        }
+        
+        
     }
 ?>

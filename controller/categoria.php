@@ -8,7 +8,10 @@
         case "combo":
             $datos = $categoria->ObtenerCat();
             $html="";
-            $html = "<option value='-1'>Selecciona una Categoria</option>";
+            /* $html .= "<option value='-1' label='Seleccionar'></option>"; */
+            $html .= "<option label='Seleccionar'></option>";
+
+
             if(is_array($datos) == true and count($datos) > 0){
                 foreach($datos as $row)
                 {

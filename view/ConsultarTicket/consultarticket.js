@@ -11,9 +11,19 @@ function init(){
 
 $(document).ready(function(){
 
+    $.post("../../controller/categoria.php?op=combo",function(data, status){
+        $('#id_categoria').html(data);
+    });
+
+    $.post("../../controller/prioridad.php?op=combo",function(data, status){
+        $('#id_prioridad').html(data);
+    });
+
+
     $.post("../../controller/usuario.php?op=combo", function(data) { 
         $('#user_asig').html(data);
     });
+
 
     if(rolID == 1){
         tabla = $('#ticket_data').dataTable({
@@ -70,7 +80,13 @@ $(document).ready(function(){
         }).DataTable(); 
 
     } else {
-        tabla = $('#ticket_data').dataTable({
+
+        var titulo_ticket = $('#titulo_ticket').val();
+        var id_categoria = $('#id_categoria').val();
+        var id_prioridad = $('#id_prioridad').val();
+
+        listardatatable(titulo_ticket,id_categoria,id_prioridad, user_id);
+        /* tabla = $('#ticket_data').dataTable({
             "aProcessing": true,
             "aServerSide": true,
             dom: 'Bfrtip',
@@ -84,9 +100,10 @@ $(document).ready(function(){
                     'pdfHtml5'
                     ],
             "ajax":{
-                url: '../../controller/ticket.php?op=listar',
+                url: '../../controller/ticket.php?op=listar_filtro',
                 type : "post",
-                dataType : "json",                     
+                dataType : "json",
+                data:{ titulo_ticket : titulo_ticket, id_categoria : id_categoria, id_prioridad : id_prioridad},                    
                 error: function(e){
                     console.log(e.responseText);    
                 }
@@ -120,7 +137,7 @@ $(document).ready(function(){
                     "sSortDescending": ": Activar para ordenar la columna de manera descendente"
                 }
             }
-        }).DataTable();  
+        }).DataTable();   */
     }
 });
 
@@ -200,6 +217,106 @@ function CambiarEstado (ticket_id){
         }
     });
     
+}
+
+$(document).on("click","#btnfiltrar", function(){
+    limpiar();
+
+    var titulo_ticket = $('#titulo_ticket').val();
+    var id_categoria = $('#id_categoria').val();
+    var id_prioridad = $('#id_prioridad').val();
+
+    listardatatable(titulo_ticket,id_categoria,id_prioridad);
+});
+
+$(document).on("click","#btntodo", function(){
+    limpiar();
+    $('#titulo_ticket').val('');
+    $('#id_categoria').val('').trigger('change');
+    $('#id_prioridad').val('').trigger('change');
+
+    listardatatable('','','');
+});
+
+
+function listardatatable(titulo_ticket,id_categoria,id_prioridad){
+    tabla = $('#ticket_data').dataTable({
+        "aProcessing": true,
+        "aServerSide": true,
+        dom: 'Bfrtip',
+        "searching": true,
+        lengthChange: false,
+        colReorder: true,
+        buttons: [                
+                'copyHtml5',
+                'excelHtml5',
+                'csvHtml5',
+                'pdfHtml5'
+                ],
+        "ajax":{
+            url: '../../controller/ticket.php?op=listar_filtro',
+            type : "post",
+            dataType : "json",
+            data:{ titulo_ticket : titulo_ticket, id_categoria : id_categoria, id_prioridad : id_prioridad},                    
+            error: function(e){
+                console.log(e.responseText);    
+            }
+        },
+        "bDestroy": true,
+        "responsive": true,
+        "bInfo":true,
+        "iDisplayLength": 10,
+        "autoWidth": false,
+        "language": {
+            "sProcessing":     "Procesando...",
+            "sLengthMenu":     "Mostrar _MENU_ registros",
+            "sZeroRecords":    "No se encontraron resultados",
+            "sEmptyTable":     "Ningún dato disponible en esta tabla",
+            "sInfo":           "Mostrando un total de _TOTAL_ registros",
+            "sInfoEmpty":      "Mostrando un total de 0 registros",
+            "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix":    "",
+            "sSearch":         "Buscar:",
+            "sUrl":            "",
+            "sInfoThousands":  ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst":    "Primero",
+                "sLast":     "Último",
+                "sNext":     "Siguiente",
+                "sPrevious": "Anterior"
+            },
+            "oAria": {
+                "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            }
+        }
+    }).DataTable(); 
+}
+
+function limpiar(){
+    $('#table').html(
+        "<table id='ticket_data' class='table table-bordered table-striped table-vcenter js-dataTable-full'>"+
+            "<thead>"+
+                "<tr>"+
+                    "<th style='width: 5%;'>#</th>"+
+                    "<th style='width: 15%;'>Unidad Administrativa</th>"+
+                    "<th style='width: 15%;'>Categoria</th>"+
+                    "<th style='width: 40%;'>Asunto</th>"+
+					"<th style='width: 5%;'>Prioridad</th>"+
+					"<th style='width: 5%;'>Estado</th>"+
+					"<th style='width: 5%;'>Fecha de Creación</th>"+
+					"<th style='width: 5%;'>Fecha de Asignación</th>"+
+					"<th style='width: 5%;'>Fecha de Cierre</th>"+
+					"<th style='width: 10%;'>Soporte</th>"+
+					"<th style='width: 5%;'></th>"+
+                "</tr>"+
+            "</thead>"+
+            "<tbody>"+
+
+            "</tbody>"+
+        "</table>"
+    );
 }
 
 init();

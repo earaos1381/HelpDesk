@@ -68,11 +68,11 @@ function guardarEditar(e){
     var formData = new FormData($("#ticket_form")[0]);
 
     if ($('#ticket_descripcion').summernote('isEmpty') || 
-        $('#id_uniadmin').val()== -1 || 
+        $('#id_uniadmin').val()== 0 || 
         $('#titulo_ticket').val()=='' || 
-        $('#id_prioridad').val() == -1 ||  
-        $('#id_categoria').val()== -1 ||
-        $('#subUni_id').val()== -1
+        $('#id_prioridad').val() == 0 ||  
+        $('#id_categoria').val()== 0 ||
+        $('#subUni_id').val()== 0
         
         ){
         swal({
