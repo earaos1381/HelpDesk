@@ -146,15 +146,11 @@
             return $resultado=$sql->fetchAll();
         }
 
-        public function actualizarPassUsuario($user_id, $user_password){
+        public function actualizarPassUsuario($user_password, $user_id){
 
             $conectar= parent::conexion();
             parent::set_names();
-            $sql="UPDATE users
-                SET
-                    user_password = MD5(?)
-                WHERE
-                    user_id = ?";
+            $sql="call sp_actualizar_contraseña_user(?,?)";
             $sql=$conectar->prepare($sql);
             $sql->bindValue(1, $user_password);
             $sql->bindValue(2, $user_id);

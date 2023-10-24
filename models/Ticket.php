@@ -125,10 +125,7 @@
         public function InsertarTicketDetalleReabrir($ticket_id,$user_id){
             $conectar= parent::conexion();
             parent::set_names();
-                $sql="	INSERT INTO detalleticket 
-                    (detalleticket_id,ticket_id,user_id,descripcion,fecha_create,estado) 
-                    VALUES 
-                    (NULL,?,?,'-Ticket Re-Abierto-',now(),'1');";
+                $sql="call sp_insertar_ticketDetalle_reabrir(?,?)";
             $sql=$conectar->prepare($sql);
             $sql->bindValue(1, $ticket_id);
             $sql->bindValue(2, $user_id);
@@ -149,11 +146,7 @@
         public function reabrirTicket($ticket_id){
             $conectar= parent::conexion();
             parent::set_names();
-            $sql="UPDATE tickets 
-                set	
-                    estado_ticket = 'Abierto'
-                where
-                    ticket_id = ?";
+            $sql="call sp_reabrir_ticket(?)";
             $sql=$conectar->prepare($sql);
             $sql->bindValue(1, $ticket_id);
             $sql->execute();

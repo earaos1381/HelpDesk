@@ -126,7 +126,7 @@
             $textoCifrado = base64_encode($iv . $cifrado);
 
             $usuario->actualizarPassUsuario($_POST["user_correo"],$textoCifrado); */
-            $usuario->actualizarPassUsuario($_POST["user_id"],$_POST["user_password"]);
+            $usuario->actualizarPassUsuario($_POST["user_password"],$_POST["user_id"]);
         break;
 
         /* case "correo":
