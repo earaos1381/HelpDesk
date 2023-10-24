@@ -216,6 +216,7 @@ function listardetalle(ticket_id){
         $('#id_uniadmin').val(data.uni_descripcion)
         $('#subUni_id').val(data.subDescripcion)
         $('#id_categoria').val(data.cat_descripcion); 
+        $('#prio_descrip').val(data.prio_descrip);
         $('#titulo_ticket').val(data.titulo_ticket);
         $('#descripcion_usu').summernote('code', data.descripcion);
 

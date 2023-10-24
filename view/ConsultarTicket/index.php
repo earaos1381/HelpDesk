@@ -40,13 +40,15 @@
                 <table id="ticket_data" class="table table-bordered table-striped table-vcenter js-dataTable-full">
                     <thead>
                         <tr>
-                            <th style="width: 5%;">No. Ticket</th>
+                            <th style="width: 5%;">#</th>
                             <th style="width: 15%;">Unidad Administrativa</th>
                             <th style="width: 15%;">Categoria</th>
                             <th style="width: 40%;">Asunto</th>
+                            <th style="width: 5%;">Prioridad</th>
                             <th style="width: 5%;">Estado</th>
-                            <th style="width: 10%;">Fecha de Creación</th>
+                            <th style="width: 5%;">Fecha de Creación</th>
                             <th style="width: 5%;">Fecha de Asignación</th>
+                            <th style="width: 5%;">Fecha de Cierre</th>
                             <th style="width: 10%;">Soporte</th>
                             <th style="width: 5%;"></th>
                         </tr>

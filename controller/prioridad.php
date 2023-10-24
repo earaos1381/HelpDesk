@@ -1,18 +1,18 @@
 <?php
     require_once("../config/conexion.php");
-    require_once("../models/Categoria.php");
+    require_once("../models/Prioridad.php");
     
-    $categoria = new Categoria();
+    $prioridad = new Prioridad();
 
     switch($_GET["op"]){
         case "combo":
-            $datos = $categoria->ObtenerCat();
+            $datos = $prioridad->ObtenerPrio();
             $html="";
-            $html = "<option value='-1'>Selecciona una Categoria</option>";
+            $html = "<option value='-1'>Selecciona una Prioridad</option>";
             if(is_array($datos) == true and count($datos) > 0){
                 foreach($datos as $row)
                 {
-                    $html.= "<option value ='".$row['cat_id']."'>".$row['cat_descripcion']."</option>";
+                    $html.= "<option value ='".$row['id_prioridad']."'>".$row['prio_descrip']."</option>";
                 }
                 echo $html;
             }

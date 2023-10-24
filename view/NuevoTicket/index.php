@@ -46,10 +46,17 @@
                     <form method="post" id="ticket_form">
 
                         <input type="hidden" id="user_id" name="user_id" value="<?php echo $_SESSION["user_id"]?>">
-                        <div class="col-lg-12">
+                        <div class="col-lg-8">
                             <fieldset class="form-group">
                                 <label class="form-label semibold" for="titulo_ticket">Asunto</label>
                                 <input type="text" class="form-control" id="titulo_ticket" name="titulo_ticket" placeholder="Ingrese Asunto">
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-4">
+                            <fieldset class="form-group">
+                                <label class="form-label semibold" for="id_prioridad">Prioridad</label>
+                                <select id="id_prioridad" name="id_prioridad" class="form-control">
+                                </select>
                             </fieldset>
                         </div>
                         <div class="col-lg-6">

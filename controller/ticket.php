@@ -20,8 +20,9 @@
             $titulo_ticket = $_POST["titulo_ticket"];
             $descripcion = $_POST["descripcion"];
             $subUni_id = isset($_POST["subUni_id"]) ? $_POST["subUni_id"] : null; // Establecer subUni_id como nulo si no se seleccionó ninguna subcategoría
-        
-            $data = $ticket->CrearTicket($user_id, $id_uniadmin, $subUni_id, $id_categoria, $titulo_ticket, $descripcion);    
+            $id_prioridad = $_POST["id_prioridad"];
+
+            $data = $ticket->CrearTicket($user_id, $id_uniadmin, $subUni_id, $id_categoria, $titulo_ticket, $descripcion, $id_prioridad);    
             
             if (is_array($data)==true and count($data)>0){
                 foreach ($data as $row){
@@ -77,6 +78,22 @@
                 $sub_array[] = $row["cat_descripcion"];
                 $sub_array[] = $row["titulo_ticket"];
 
+                $priority_label = '';
+                switch ($row["prio_descrip"]) {
+                    case 'Alta':
+                        $priority_label = '<span class="label label-pill label-danger">Alta</span>';
+                        break;
+                    case 'Media':
+                        $priority_label = '<span class="label label-pill label-warning">Media</span>';
+                        break;
+                    case 'Baja':
+                        $priority_label = '<span class="label label-pill label-primary">Baja</span>';
+                        break;
+                    default:
+                        $priority_label = $row["prio_descrip"]; 
+                }
+                $sub_array[] = $priority_label;    
+
                 if($row["estado_ticket"] == "Abierto"){
                     $sub_array[] = '<span class="label label-pill label-success">Abierto</span>';
                 } else {
@@ -89,6 +106,12 @@
                     $sub_array[] = '<span class="label label-pill label-default">Sin Asignar</span>';
                 } else {
                     $sub_array[] = date("d/m/Y - H:i:s", strtotime($row["fech_asig"]));
+                }
+
+                if($row["fech_cierre"] == NULL){
+                    $sub_array[] = '<span class="label label-pill label-default">Sin Cerrar</span>';
+                } else {
+                    $sub_array[] = date("d/m/Y - H:i:s", strtotime($row["fech_cierre"]));
                 }
 
                 if($row["user_asig"] == NULL){
@@ -122,6 +145,22 @@
                 $sub_array[] = $row["cat_descripcion"];
                 $sub_array[] = $row["titulo_ticket"];
 
+                $priority_label = '';
+                switch ($row["prio_descrip"]) {
+                    case 'Alta':
+                        $priority_label = '<span class="label label-pill label-danger">Alta</span>';
+                        break;
+                    case 'Media':
+                        $priority_label = '<span class="label label-pill label-warning">Media</span>';
+                        break;
+                    case 'Baja':
+                        $priority_label = '<span class="label label-pill label-primary">Baja</span>';
+                        break;
+                    default:
+                        $priority_label = $row["prio_descrip"]; 
+                }
+                $sub_array[] = $priority_label;
+
                 if($row["estado_ticket"] == "Abierto"){
                     $sub_array[] = '<span class="label label-pill label-success">Abierto</span>';
                 } else {
@@ -134,6 +173,12 @@
                     $sub_array[] = '<span class="label label-pill label-default">Sin Asignar</span>';
                 } else {
                     $sub_array[] = date("d/m/Y - H:i:s", strtotime($row["fech_asig"]));
+                }
+
+                if($row["fech_cierre"] == NULL){
+                    $sub_array[] = '<span class="label label-pill label-default">Sin Cerrar</span>';
+                } else {
+                    $sub_array[] = date("d/m/Y - H:i:s", strtotime($row["fech_cierre"]));
                 }
 
                 if($row["user_asig"] == NULL){
@@ -216,6 +261,18 @@
                     $output["id_categoria"] = $row["id_categoria"];
                     $output["titulo_ticket"] = $row["titulo_ticket"];
                     $output["descripcion"] = $row["descripcion"];
+                    $output["prio_descrip"] = $row["prio_descrip"];
+                    /* $priority_mapping = array(
+                        'Alta' => '<span class="label label-pill label-danger">Alta</span>',
+                        'Media' => '<span class="label label-pill label-warning">Media</span>',
+                        'Baja' => '<span class="label label-pill label-primary">Baja</span>'
+                    );
+                    $output["priority_label"] = $priority_mapping[$row["prio_descrip"]] ?? $row["prio_descrip"]; */
+
+                                
+
+
+
                     if ($row["estado_ticket"]=="Abierto"){
                         $output["estado_ticket"] = '<span class="label label-pill label-success">Abierto</span>';
                     } else{
@@ -224,8 +281,9 @@
 
                     $output["estado_ticket_texto"] = $row["estado_ticket"];
                     $output["fecha_create"] = date("d/m/Y - H:i:s", strtotime($row["fecha_create"]));
+                    $output["fecha_create"] = date("d/m/Y - H:i:s", strtotime($row["fecha_create"]));
                     $output["user_nom"] = $row["user_nom"];
-                    $output["user_ap"] = $row["user_ap"];
+                    $output["user_ap"] = $row["user_ap"];                 
                     $output["uni_descripcion"] = $row["uni_descripcion"];
                     $output["subDescripcion"] = $row["subDescripcion"];
                     $output["cat_descripcion"] = $row["cat_descripcion"];

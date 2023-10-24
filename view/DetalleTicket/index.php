@@ -27,6 +27,7 @@
                             <div class="tbl-cell">
                                 <h3 id="lblnoticket"></h3>
                                 <span id="lblestado"></span>
+                                <!-- <span id="lblprioridad"></span> -->
                                 <span class="label label-pill label-primary" id="lblnomusuario"></span>
                                 <span class="label label-pill label-default" id="lblfechacreacion"></span>
                                 <ol class="breadcrumb breadcrumb-simple">
@@ -40,7 +41,7 @@
 
             <div class="box-typical box-typical-padding">
                 <div class="row">
-                <div class="col-lg-4">
+                <div class="col-lg-8">
                     <fieldset class="form-group">
                         <label class="form-label semibold" for="titulo_ticket">Asunto</label>
                         <input type="text" class="form-control" id="titulo_ticket" name="titulo_ticket" readonly>
@@ -48,11 +49,17 @@
                 </div>
                 <div class="col-lg-4">
                     <fieldset class="form-group">
+                        <label class="form-label semibold" for="prio_descrip">Prioridad</label>
+                        <input type="text" class="form-control" id="prio_descrip" name="prio_descrip" readonly>
+                    </fieldset>
+                </div>
+                <div class="col-lg-6">
+                    <fieldset class="form-group">
                         <label class="form-label semibold" for="id_uniadmin">Unidad Administrativa Principal</label>
                         <input type="text" class="form-control" id="id_uniadmin" name="id_uniadmin" readonly>
                     </fieldset>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-6">
                     <fieldset class="form-group">
                         <label class="form-label semibold" for="subUni_id">Unidad Administrativa Sub</label>
                         <input type="text" class="form-control" id="subUni_id" name="subUni_id" readonly>

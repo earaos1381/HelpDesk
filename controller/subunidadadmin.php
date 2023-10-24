@@ -8,10 +8,11 @@ switch($_GET["op"]){
     case "combo":
         $id_uniadmin = $_POST['id_uniadmin'];
         $datos = $subunidadadmin->ObtenerSubuni($id_uniadmin);
-        $html = "";
+        $html="";
+        $html = "<option value='-1'>Selecciona una SubCategoria</option>";
+
 
         if(is_array($datos) == true and count($datos) > 0){
-            $html = "<option>Selecciona una Subcategoria</option>";
             foreach($datos as $row) {
                 $html .= "<option value='".$row['subUni_id']."'>".$row['subDescripcion']."</option>";
             }
