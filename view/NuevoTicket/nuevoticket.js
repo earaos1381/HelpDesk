@@ -39,6 +39,21 @@ $(document).ready(function() {
         $('#id_uniadmin').html(data);
     });
 
+    $("#id_uniadmin").change(function(){
+        id_uniadmin = $(this).val();
+        
+        $.post("../../controller/subunidadadmin.php?op=combo",{id_uniadmin : id_uniadmin}, function(data, status){
+            $('#subUni_id').html(data);
+
+            if (data.indexOf('No hay subcategorías disponibles') !== -1) {
+                $('#subUni_id').prop('disabled', true);
+            } else {
+                $('#subUni_id').prop('disabled', false);
+            }
+        });
+
+    });
+
     $.post("../../controller/categoria.php?op=combo",function(data, status){
         $('#id_categoria').html(data);
     });
@@ -72,14 +87,14 @@ function guardarEditar(e){
 
                 success: function(data){
                     data = JSON.parse(data);
-                    console.log(data[0].ticket_id);
-
+                    
                     $.post("../../controller/email.php?op=ticket_abierto", {ticket_id : data[0].ticket_id}, function(data){ 
 
 
                     });
 
                     $('#id_uniadmin').val('');
+                    $('#subUni_id').val('');
                     $('#id_categoria').val('');
                     $('#titulo_ticket').val('');
                     $('#ticket_descripcion').summernote('reset');

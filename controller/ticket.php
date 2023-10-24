@@ -13,7 +13,16 @@
     switch($_GET["op"]){
 
         case "guardar":
-            $data=$ticket->CrearTicket($_POST["user_id"],$_POST["id_uniadmin"],$_POST["id_categoria"],$_POST["titulo_ticket"],$_POST["descripcion"]);
+
+            $user_id = $_POST["user_id"];
+            $id_uniadmin = $_POST["id_uniadmin"];
+            $id_categoria = $_POST["id_categoria"];
+            $titulo_ticket = $_POST["titulo_ticket"];
+            $descripcion = $_POST["descripcion"];
+            $subUni_id = isset($_POST["subUni_id"]) ? $_POST["subUni_id"] : null; // Establecer subUni_id como nulo si no se seleccionó ninguna subcategoría
+        
+            $data = $ticket->CrearTicket($user_id, $id_uniadmin, $subUni_id, $id_categoria, $titulo_ticket, $descripcion);    
+            
             if (is_array($data)==true and count($data)>0){
                 foreach ($data as $row){
                     $output["ticket_id"] = $row["ticket_id"];
@@ -203,6 +212,7 @@
                     $output["ticket_id"] = $row["ticket_id"];
                     $output["user_id"] = $row["user_id"];
                     $output["id_uniadmin"] = $row["id_uniadmin"];
+                    $output["subUni_id"] = $row["subUni_id"];
                     $output["id_categoria"] = $row["id_categoria"];
                     $output["titulo_ticket"] = $row["titulo_ticket"];
                     $output["descripcion"] = $row["descripcion"];
@@ -217,6 +227,7 @@
                     $output["user_nom"] = $row["user_nom"];
                     $output["user_ap"] = $row["user_ap"];
                     $output["uni_descripcion"] = $row["uni_descripcion"];
+                    $output["subDescripcion"] = $row["subDescripcion"];
                     $output["cat_descripcion"] = $row["cat_descripcion"];
                 }
                 echo json_encode($output);

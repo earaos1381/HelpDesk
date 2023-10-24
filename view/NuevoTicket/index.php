@@ -54,19 +54,26 @@
                         </div>
                         <div class="col-lg-6">
                             <fieldset class="form-group">
-                                <label class="form-label semibold" for="id_uniadmin">Unidad Administrativa</label>
+                                <label class="form-label semibold" for="id_uniadmin">Unidad Administrativa Principal</label>
                                 <select id="id_uniadmin" name="id_uniadmin" class="form-control">
                                 </select>
                             </fieldset>
                         </div>
-                        <div class="col-lg-3">
+                        <div class="col-lg-6">
+                            <fieldset class="form-group">
+                                <label class="form-label semibold" for="subUni_id">Unidad Administrativa Sub</label>
+                                <select id="subUni_id" name="subUni_id" class="form-control">
+                                </select>
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-4">
                             <fieldset class="form-group">
                                 <label class="form-label semibold" for="id_categoria">Categoria</label>
                                 <select id="id_categoria" name="id_categoria" class="form-control">
                                 </select>
                             </fieldset>
                         </div>
-                        <div class="col-lg-3">
+                        <div class="col-lg-4">
                             <fieldset class="form-group">
                                 <label class="form-label semibold" for="id_categoria">Archivos Adjuntos</label>
                                 <input type="file" name="fileElem" id="fileElem" class="form-control" multiple>

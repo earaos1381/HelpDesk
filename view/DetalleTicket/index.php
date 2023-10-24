@@ -40,7 +40,7 @@
 
             <div class="box-typical box-typical-padding">
                 <div class="row">
-                <div class="col-lg-12">
+                <div class="col-lg-4">
                     <fieldset class="form-group">
                         <label class="form-label semibold" for="titulo_ticket">Asunto</label>
                         <input type="text" class="form-control" id="titulo_ticket" name="titulo_ticket" readonly>
@@ -48,8 +48,14 @@
                 </div>
                 <div class="col-lg-4">
                     <fieldset class="form-group">
-                        <label class="form-label semibold" for="id_uniadmin">Unidad Administrativa</label>
+                        <label class="form-label semibold" for="id_uniadmin">Unidad Administrativa Principal</label>
                         <input type="text" class="form-control" id="id_uniadmin" name="id_uniadmin" readonly>
+                    </fieldset>
+                </div>
+                <div class="col-lg-4">
+                    <fieldset class="form-group">
+                        <label class="form-label semibold" for="subUni_id">Unidad Administrativa Sub</label>
+                        <input type="text" class="form-control" id="subUni_id" name="subUni_id" readonly>
                     </fieldset>
                 </div>    
                 <div class="col-lg-4">

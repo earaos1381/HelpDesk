@@ -1,17 +1,18 @@
 <?php
     class Ticket extends Conectar{
 
-        public function CrearTicket($user_id, $id_uniadmin, $id_categoria, $titulo_ticket, $descripcion){
+        public function CrearTicket($user_id, $id_uniadmin, $subUni_id, $id_categoria, $titulo_ticket, $descripcion){
 
             $conectar=parent::conexion();
             parent::set_names();
-            $sql = "call sp_insertar_ticket(?,?,?,?,?)";
+            $sql = "call sp_insertar_ticket(?,?,?,?,?,?)";
             $sql = $conectar->prepare($sql);
             $sql->bindValue(1, $user_id);
             $sql->bindValue(2, $id_uniadmin);
-            $sql->bindValue(3, $id_categoria);
-            $sql->bindValue(4, $titulo_ticket);
-            $sql->bindValue(5, $descripcion);
+            $sql->bindValue(3, $subUni_id ? $subUni_id : null);
+            $sql->bindValue(4, $id_categoria);
+            $sql->bindValue(5, $titulo_ticket);
+            $sql->bindValue(6, $descripcion);
             $sql->execute();
             
             $sql1 = "SELECT last_insert_id() AS 'ticket_id'";
@@ -48,7 +49,8 @@
             $sql = "SELECT
             tickets.ticket_id, 
             tickets.user_id,
-            tickets.id_uniadmin, 
+            tickets.id_uniadmin,
+            tickets.subUni_id,
             tickets.id_categoria, 
             tickets.titulo_ticket, 
             tickets.descripcion,
@@ -59,9 +61,11 @@
             users.user_nom, 
             users.user_ap, 
             categorias.cat_descripcion,
-            unidadesadmin.uni_descripcion  
+            unidadesadmin.uni_descripcion,
+            sub_unidadesadmin.subDescripcion 
             FROM tickets
             INNER JOIN unidadesadmin ON tickets.id_uniadmin = unidadesadmin.id_uniadmin
+            LEFT JOIN sub_unidadesadmin ON tickets.subUni_id = sub_unidadesadmin.subUni_id
             INNER JOIN categorias ON tickets.id_categoria = categorias.cat_id
             INNER JOIN users ON tickets.user_id = users.user_id
             WHERE tickets.estado = 1";

@@ -7,6 +7,7 @@
     switch($_GET["op"]){
         case "combo":
             $datos = $categoria->ObtenerUni();
+            $html="";
             if(is_array($datos) == true and count($datos) > 0){
                 
                 $html = "<option>Selecciona una Unidad Administrativa</option>";
