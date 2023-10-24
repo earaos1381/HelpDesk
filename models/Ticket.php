@@ -256,7 +256,7 @@
             return $resultado = $sql->fetchAll();
         }
 
-        public function filtrarTicket($titulo_ticket, $id_categoria, $id_prioridad, $id_rol) {
+        public function filtrarTicket($titulo_ticket, $id_categoria, $id_prioridad, $id_rol, $user_id) {
             $conectar = parent::conexion();
             parent::set_names();
             $sql = "SELECT 
@@ -290,36 +290,30 @@
             $params = array();
         
             if (!empty($titulo_ticket)) {
-                $sql .= " AND tickets.titulo_ticket LIKE ?";
-                $params[] = "%$titulo_ticket%";
+                $sql .= " AND tickets.titulo_ticket LIKE :titulo_ticket";
+                $params[":titulo_ticket"] = "%$titulo_ticket%";
             }
             if (!empty($id_categoria)) {
-                $sql .= " AND tickets.id_categoria = ?";
-                $params[] = $id_categoria;
+                $sql .= " AND tickets.id_categoria = :id_categoria";
+                $params[":id_categoria"] = $id_categoria;
             }
             if (!empty($id_prioridad)) {
-                $sql .= " AND tickets.id_prioridad = ?";
-                $params[] = $id_prioridad;
+                $sql .= " AND tickets.id_prioridad = :id_prioridad";
+                $params[":id_prioridad"] = $id_prioridad;
             }
         
             if ($id_rol == 2) {
                 $sql .= " AND tickets.user_asig = :user_id";
+                $params[":user_id"] = $user_id;
             }
         
             $sql = $conectar->prepare($sql);
         
-            foreach ($params as $key => $value) {
-                $paramPosition = $key + 1;
-                $sql->bindValue($paramPosition, $value);
-            }
+            $sql->execute($params);
         
-            if ($id_rol == 2) {
-                $sql->bindParam(":user_id", $_SESSION["user_id"], PDO::PARAM_INT);
-            }
-        
-            $sql->execute();
             return $resultado = $sql->fetchAll();
         }
+        
         
         
     }

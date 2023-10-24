@@ -24,6 +24,7 @@ $(document).ready(function(){
         $('#user_asig').html(data);
     });
 
+    
 
     if(rolID == 1){
         tabla = $('#ticket_data').dataTable({
@@ -239,7 +240,7 @@ $(document).on("click","#btntodo", function(){
 });
 
 
-function listardatatable(titulo_ticket,id_categoria,id_prioridad){
+function listardatatable(titulo_ticket, id_categoria, id_prioridad, user_id) {
     tabla = $('#ticket_data').dataTable({
         "aProcessing": true,
         "aServerSide": true,
@@ -247,19 +248,24 @@ function listardatatable(titulo_ticket,id_categoria,id_prioridad){
         "searching": true,
         lengthChange: false,
         colReorder: true,
-        buttons: [                
-                'copyHtml5',
-                'excelHtml5',
-                'csvHtml5',
-                'pdfHtml5'
-                ],
-        "ajax":{
+        buttons: [
+            'copyHtml5',
+            'excelHtml5',
+            'csvHtml5',
+            'pdfHtml5'
+        ],
+        "ajax": {
             url: '../../controller/ticket.php?op=listar_filtro',
-            type : "post",
-            dataType : "json",
-            data:{ titulo_ticket : titulo_ticket, id_categoria : id_categoria, id_prioridad : id_prioridad},                    
-            error: function(e){
-                console.log(e.responseText);    
+            type: "post",
+            dataType: "json",
+            data: {
+                titulo_ticket: titulo_ticket,
+                id_categoria: id_categoria,
+                id_prioridad: id_prioridad,
+                user_id: user_id // Agrega el user_id
+            },
+            error: function(e) {
+                console.log(e.responseText);
             }
         },
         "bDestroy": true,

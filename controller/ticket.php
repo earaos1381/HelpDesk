@@ -222,7 +222,13 @@
                 $_SESSION["id_prioridad"] = "";
             }
         
-            $datos = $ticket->filtrarTicket($_SESSION["titulo_ticket"], $_SESSION["id_categoria"], $_SESSION["id_prioridad"], $_SESSION["id_rol"], $_SESSION["user_id"]);
+            $datos = $ticket->filtrarTicket(
+                $_SESSION["titulo_ticket"],
+                $_SESSION["id_categoria"],
+                $_SESSION["id_prioridad"],
+                $_SESSION["id_rol"],
+                $_SESSION["user_id"]
+            );
             $data = Array();
         
             foreach($datos as $row){
