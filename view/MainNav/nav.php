@@ -54,6 +54,30 @@ if ($_SESSION["id_rol"] == 1) {
                         <span class="lbl">Gestión de Usuarios</span>
                     </a>
                 </li>
+                <li class="blue-dirty">
+                    <a href="..\Categoria">
+                        <span class="glyphicon glyphicon-th"></span>
+                        <span class="lbl">Categorias</span>
+                    </a>
+                </li>
+                <li class="blue-dirty">
+                    <a href="..\UnidadAdministrativa">
+                        <span class="glyphicon glyphicon-th"></span>
+                        <span class="lbl">Unidad Administrativa</span>
+                    </a>
+                </li>
+                <li class="blue-dirty">
+                    <a href="..\UnidadAdministrativaSub">
+                        <span class="glyphicon glyphicon-th"></span>
+                        <span class="lbl">Sub Unidad Admin</span>
+                    </a>
+                </li>
+                <li class="blue-dirty">
+                    <a href="..\Prioridad">
+                        <span class="glyphicon glyphicon-th"></span>
+                        <span class="lbl">Prioridades</span>
+                    </a>
+                </li>
                 <?php
             }
             ?>
