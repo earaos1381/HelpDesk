@@ -305,6 +305,9 @@
             if ($id_rol == 2) {
                 $sql .= " AND tickets.user_asig = :user_id";
                 $params[":user_id"] = $user_id;
+            } elseif ($id_rol == 1) {
+                $sql .= " AND tickets.user_id = :user_id";
+                $params[":user_id"] = $user_id;
             }
         
             $sql = $conectar->prepare($sql);

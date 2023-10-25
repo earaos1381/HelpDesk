@@ -135,7 +135,7 @@
             echo json_encode($results);    
         break;
 
-        case "listar": //listar por rol - ESTE FUNCIONA PERO SERA HISTORICO
+        /* case "listar": //listar por rol - ESTE FUNCIONA PERO SERA HISTORICO
             $datos = $ticket->ListarTicket($_SESSION["id_rol"]);
             $data= Array();
             foreach($datos as $row){
@@ -200,7 +200,7 @@
                 "itotalDisplayRecords"=>count($data),
                 "aaData"=>$data);
             echo json_encode($results);    
-        break;
+        break; */
 
         case "listar_filtro":
 
