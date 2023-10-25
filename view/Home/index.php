@@ -71,6 +71,9 @@
 	<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
 
     <script type="text/javascript" src="home.js"></script>
+
+    <script type="text/javascript" src="../notificacion.js"></script>
+    
 </body>
 </html>
 

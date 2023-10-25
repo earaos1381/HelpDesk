@@ -103,12 +103,40 @@
 
             $conectar=parent::conexion();
             parent::set_names(); 
+
+            if($_SESSION["id_rol"] == 1){
+
+                $ticket = new Ticket();
+                $datos = $ticket->ListarTicketPorID($ticket_id);
+                foreach ($datos as $row){
+                    $usu_asig = $row["user_asig"];
+                }
+
+                $sql0 = "INSERT INTO notificacion (not_id, user_id, mensaje, ticket_id, estado) VALUES (NULL, $usu_asig, 'Tienes una nueva respuesta del Usuario - Ticket: # ', ?, 2)";
+                $sql0=$conectar->prepare($sql0);
+                $sql0->bindValue(1, $ticket_id);
+                $sql0->execute();    
+
+            } else{
+                $sql0 = "INSERT INTO notificacion (not_id, user_id, mensaje, ticket_id, estado) VALUES (NULL, ?, 'Tienes una nueva respuesta del Soporte - Ticket: # ', ?, 2)";
+                $sql0=$conectar->prepare($sql0);
+                $sql0->bindValue(1, $user_id);
+                $sql0->bindValue(2, $ticket_id);
+                $sql0->execute();  
+            }
+
+
             $sql = "call sp_insertar_ticketDetalle(?,?,?)";
             $sql = $conectar->prepare($sql);
             $sql->bindValue(1, $ticket_id);
             $sql->bindValue(2, $user_id);
             $sql->bindValue(3, $descripcion);
             $sql->execute();
+
+
+                
+
+            
 
             return $resultado = $sql->fetchAll();
         }
@@ -161,12 +189,25 @@
         public function actualizarTicketAsignacion($user_asig ,$ticket_id){
             $conectar= parent::conexion();
             parent::set_names();
-            $sql="call sp_actualizar_ticket_asignacion(?,?)";
+            /* $sql="call sp_actualizar_ticket_asignacion(?,?)"; */
+            $sql = "UPDATE tickets 
+                    SET	
+                        user_asig = ?,
+                        fech_asig = now()
+                    where
+                        ticket_id = ?;";
             $sql=$conectar->prepare($sql);
             $sql->bindValue(1, $user_asig);
             $sql->bindValue(2, $ticket_id);
             $sql->execute();
-            return $resultado=$sql->fetchAll();
+
+            $sql1 = "INSERT INTO notificacion (not_id, user_id, mensaje, ticket_id, estado) VALUES (NULL, ?, 'Se te ha asignado el Ticket: # ', ?, 2)";
+            $sql1=$conectar->prepare($sql1);
+            $sql1->bindValue(1, $user_asig);
+            $sql1->bindValue(2, $ticket_id);
+            $sql1->execute();
+            
+            return $resultado=$sql1->fetchAll();
         }
 
         public function obtenerTicket(){
