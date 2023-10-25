@@ -5,9 +5,7 @@
 
             $conectar=parent::conexion();
             parent::set_names();
-
-            /* $sql = "call sp_obtener_subuniAdmin(?)"; */
-            $sql = "SELECT * FROM sub_unidadesadmin WHERE id_uniadmin = ? AND estado = 1";
+            $sql = "call sp_obtener_subuniAdmin(?)";
             $sql = $conectar->prepare($sql);
             $sql->bindValue(1, $id_uniadmin);
             $sql->execute();

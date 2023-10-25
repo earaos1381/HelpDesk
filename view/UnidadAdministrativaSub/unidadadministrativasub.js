@@ -35,8 +35,7 @@ function guardaryeditar(e){
 
 $(document).ready(function(){
 
-    $.post("../../controller/subunidadadmin.php?op=combo",function(data, status){
-        console.log(data);
+    $.post("../../controller/unidadAdmin.php?op=combo",function(data, status){
         $('#id_uniadmin').html(data);
     });
 
@@ -96,7 +95,6 @@ $(document).ready(function(){
 
 function editar(subUni_id){
     $('#mdltitulo').html('Editar Registro');
-
 
     $.post("../../controller/subunidadadmin.php?op=mostrar", {subUni_id : subUni_id}, function (data) {
         data = JSON.parse(data);

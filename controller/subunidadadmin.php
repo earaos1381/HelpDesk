@@ -12,7 +12,7 @@ switch($_GET["op"]){
         }else {
             $subunidadadmin->ActualizarSubuni($_POST["subUni_id"],$_POST["id_uniadmin"],$_POST["subDescripcion"]);
         }
-        break;
+    break;
 
     case "listar":
         $datos=$subunidadadmin->ObtenerSubuniTodas();
@@ -32,11 +32,11 @@ switch($_GET["op"]){
             "iTotalDisplayRecords"=>count($data),
             "aaData"=>$data);
         echo json_encode($results);
-        break;
+    break;
 
     case "eliminar":
         $subunidadadmin->EliminarSubuni($_POST["subUni_id"]);
-        break;
+    break;
 
     case "mostrar";
         $datos=$subunidadadmin->ObtenerSubuniID($_POST["subUni_id"]);  
@@ -49,21 +49,16 @@ switch($_GET["op"]){
             }
             echo json_encode($output);
         }
-        break;
+    break;
         
 
     case "combo":
-        $id_uniadmin = $_POST['id_uniadmin'];
-        $datos = $subunidadadmin->ObtenerSubuni($id_uniadmin);
+        $datos = $subunidadadmin->ObtenerSubuni($_POST['id_uniadmin']);
         $html="";
-        $html = "<option value='-1'>Selecciona una SubCategoria</option>";
-
-/*         $html .= "<option label='Seleccionar'></option>"; */
-
-
+        $html.= "<option value='-1'>Selecciona una SubCategoria</option>";
         if(is_array($datos) == true and count($datos) > 0){
             foreach($datos as $row) {
-                $html .= "<option value='".$row['subUni_id']."'>".$row['subDescripcion']."</option>";
+                $html.= "<option value='".$row['subUni_id']."'>".$row['subDescripcion']."</option>";
             }
         } else {
             $html = "<option value=''>No hay subcategorías disponibles</option>";
