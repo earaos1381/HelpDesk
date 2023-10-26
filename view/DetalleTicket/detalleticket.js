@@ -227,6 +227,7 @@ function listardetalle(ticket_id){
             
         } 
     });
+
 }
 
 init();

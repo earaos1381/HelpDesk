@@ -104,24 +104,22 @@
             $conectar=parent::conexion();
             parent::set_names(); 
 
-            if($_SESSION["id_rol"] == 1){
-
-                $ticket = new Ticket();
+            $ticket = new Ticket();
                 $datos = $ticket->ListarTicketPorID($ticket_id);
                 foreach ($datos as $row){
                     $usu_asig = $row["user_asig"];
+                    $usu_crea = $row["user_id"];
                 }
 
-                $sql0 = "INSERT INTO notificacion (not_id, user_id, mensaje, ticket_id, estado) VALUES (NULL, $usu_asig, 'Tienes una nueva respuesta del Usuario - Ticket: # ', ?, 2)";
+            if($_SESSION["id_rol"] == 1){
+
+                $sql0 = "INSERT INTO notificacion (not_id, user_id, mensaje, ticket_id, estado) VALUES (NULL, $usu_asig, 'Tienes una nueva respuesta del Usuario - Ticket: # ', $ticket_id, 2)";
                 $sql0=$conectar->prepare($sql0);
-                $sql0->bindValue(1, $ticket_id);
                 $sql0->execute();    
 
-            } else{
-                $sql0 = "INSERT INTO notificacion (not_id, user_id, mensaje, ticket_id, estado) VALUES (NULL, ?, 'Tienes una nueva respuesta del Soporte - Ticket: # ', ?, 2)";
+            } else {
+                $sql0 = "INSERT INTO notificacion (not_id, user_id, mensaje, ticket_id, estado) VALUES (NULL, $usu_crea, 'Tienes una nueva respuesta del Soporte - Ticket: # ', $ticket_id, 2)";
                 $sql0=$conectar->prepare($sql0);
-                $sql0->bindValue(1, $user_id);
-                $sql0->bindValue(2, $ticket_id);
                 $sql0->execute();  
             }
 
@@ -132,11 +130,6 @@
             $sql->bindValue(2, $user_id);
             $sql->bindValue(3, $descripcion);
             $sql->execute();
-
-
-                
-
-            
 
             return $resultado = $sql->fetchAll();
         }

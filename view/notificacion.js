@@ -16,34 +16,23 @@ function mostrar_notificacion(){
         contentType: false,
         processData: false,
         success: function(data){
-            data = JSON.parse(data);
-            $.notify({
-                icon: 'glyphicon glyphicon-exclamation-sign',
-                message: data.mensaje,
-                url: "http://anderson-bastidas.com"
-            });
-            /* if (data==''){
 
+            if (data==''){
             }else{
+
                 data = JSON.parse(data);
                 $.notify({
-                    icon: 'glyphicon glyphicon-star',
-                    message: data.not_mensaje,
-                    url: "http://localhost:90/PERSONAL_HelpDesk/view/DetalleTicket/?ID="+data.ticket_id
+                    icon: 'glyphicon glyphicon-exclamation-sign',
+                    message: data.mensaje,
+                    url: "http://localhost/mesaayuda/view/DetalleTicket/?id="+data.ticket_id
                 });
 
                 $.post("../../controller/notificacion.php?op=actualizar", {not_id : data.not_id}, function (data) {
 
                 });
-            } */
+            }
         }
     });
-
-    /* $.notify({
-        icon: 'glyphicon glyphicon-exclamation-sign',
-        message: "tienes datos pendientes",
-        url: "http://anderson-bastidas.com"
-    }); */
 
 }
 

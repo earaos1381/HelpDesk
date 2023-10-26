@@ -61,6 +61,8 @@
     <?php require_once("../MainJS/js.php");?>
 
     <script type="text/javascript" src="prioridad.js"></script>
+
+    <script type="text/javascript" src="../notificacion.js"></script>
 </body>
 </html>
 

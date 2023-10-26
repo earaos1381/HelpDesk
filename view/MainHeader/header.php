@@ -17,6 +17,11 @@
 	        <div class="site-header-content">
 	            <div class="site-header-content-in">
 	                <div class="site-header-shown">
+						<div class="dropdown dropdown-notification notif">
+							<a href="../Notificacion/" class="header-alarm">
+								<i class="font-icon-alarm"></i>
+	                        </a>
+						</div>
 	                    <div class="dropdown user-menu">
 	                        <button class="dropdown-toggle" id="dd-user-menu" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 	                            <img src="../../public/img/<?php echo $_SESSION["id_rol"]?>.jpg" alt="">

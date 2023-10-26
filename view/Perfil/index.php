@@ -66,7 +66,7 @@
 
     <script type="text/javascript" src="perfil.js"></script>
 
-    <!-- <script type="text/javascript" src="../notificacion.js"></script> -->
+    <<script type="text/javascript" src="../notificacion.js"></script>
 
 </body>
 </html>
