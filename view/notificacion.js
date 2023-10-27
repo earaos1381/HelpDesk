@@ -24,7 +24,7 @@ function mostrar_notificacion(){
                 $.notify({
                     icon: 'glyphicon glyphicon-exclamation-sign',
                     message: data.mensaje,
-                    url: "http://localhost/mesaayuda/view/DetalleTicket/?id="+data.ticket_id
+                    /* url: "http://localhost/mesaayuda/view/DetalleTicket/?id="+data.ticket_id */
                 });
 
                 $.post("../../controller/notificacion.php?op=actualizar", {not_id : data.not_id}, function (data) {

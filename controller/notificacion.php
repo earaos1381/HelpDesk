@@ -4,10 +4,6 @@
     
     $notifiacion = new Notificacion();
 
-/*     $key="mi_key_secret";
-    $cipher="aes-256-cbc";
-    $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($cipher)); */
-
     switch($_GET["op"]){
         
         case "mostrar";
@@ -19,6 +15,7 @@
                     $output["user_id"] = $row["user_id"];
                     $output["mensaje"] = $row["mensaje"] .' '. $row["ticket_id"];
                     $output["ticket_id"] = $row["ticket_id"];
+                    
                 }
                 echo json_encode($output);
             }
@@ -29,27 +26,31 @@
         break;
 
         case "listar":
-            $datos=$notifiacion->ObtenerNotificacionPorUsuario2($_POST["user_id"]);
-            $data= Array();
-            foreach($datos as $row){
+            $datos = $notifiacion->ObtenerNotificacionPorUsuario2($_POST["user_id"]);
+            $data = Array();
+            foreach ($datos as $row) {
                 $sub_array = array();
-                $sub_array[] = $row["mensaje"] . ' ' . $row["ticket_id"];
-
-                /* $cifrado = openssl_encrypt($row["ticket_id"], $cipher, $key, OPENSSL_RAW_DATA, $iv);
-                $textoCifrado = base64_encode($iv . $cifrado); */
-
-                /* $sub_array[] = '<button type="button" data-ciphertext="'.$textoCifrado.'" id="'.$textoCifrado.'" class="btn btn-inline btn-primary btn-sm ladda-button"><i class="fa fa-eye"></i></button>'; */
-                $sub_array[] = '<button type="button" onClick="ver('.$row["ticket_id"].')" id="'.$row["ticket_id"].'" class="btn btn-inline btn-primary btn-sm ladda-button"><i class="fa fa-eye"></i></button>';
+                $not_id = $row["not_id"];
+                $ticket_id = $row["ticket_id"];
+                $sub_array[] = $row["mensaje"] . ' ' . $ticket_id;
+                $sub_array[] = '<button type="button" onClick="ver(' . $not_id . ',' . $ticket_id . ')" data-not_id="' . $not_id . '" data-ticket_id="' . $ticket_id . '" class="btn btn-inline btn-primary btn-sm ladda-button"><i class="fa fa-eye"></i></button>';
                 $data[] = $sub_array;
             }
-
+        
             $results = array(
-                "sEcho"=>1,
-                "iTotalRecords"=>count($data),
-                "iTotalDisplayRecords"=>count($data),
-                "aaData"=>$data);
+                "sEcho" => 1,
+                "iTotalRecords" => count($data),
+                "iTotalDisplayRecords" => count($data),
+                "aaData" => $data
+            );
             echo json_encode($results);
+            break;
+        
+
+        case "leer";
+            $notifiacion->ActualizarNotificacionEstadoLeido($_POST["not_id"]);
         break;
+        
 
     }
 

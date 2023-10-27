@@ -33,7 +33,7 @@ $(document).ready(function(){
             "sProcessing":     "Procesando...",
             "sLengthMenu":     "Mostrar _MENU_ registros",
             "sZeroRecords":    "No se encontraron resultados",
-            "sEmptyTable":     "Ningún dato disponible en esta tabla",
+            "sEmptyTable":     "Sin ninguna notificación",
             "sInfo":           "Mostrando un total de _TOTAL_ registros",
             "sInfoEmpty":      "Mostrando un total de 0 registros",
             "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
@@ -61,8 +61,42 @@ $(document).ready(function(){
     window.open('http://localhost/mesaayuda/view/DetalleTicket/?id='+ ciphertext +'');
 }); */
 
-function ver(ticket_id){ //modificaciones
+/* function ver(ticket_id){ //modificaciones
+    
     window.open('http://localhost/mesaayuda/view/DetalleTicket/?id='+ ticket_id +'');
 
     window.close();
+} */
+
+$(document).on("click", ".btn-ver", function () {
+    const not_id = $(this).data("not_id"); 
+    const ticket_id = $(this).data("ticket_id"); 
+
+    ver(not_id, ticket_id);
+});
+
+function ver(not_id, ticket_id) {
+
+    $.ajax({
+        type: "POST",
+        url: "../../controller/notificacion.php?op=leer",
+        data: { not_id: not_id },
+        success: function (response) {
+            console.log("Estado de la notificación cambiado con éxito.");
+            abrirTicket(ticket_id);
+        },
+        error: function (xhr, status, error) {
+            console.error("Error al cambiar el estado de la notificación: " + error);
+        }
+    });
 }
+
+
+function abrirTicket(ticket_id) {
+    window.open('http://localhost/mesaayuda/view/DetalleTicket/?id=' + ticket_id);
+    window.close();
+}
+
+
+
+
