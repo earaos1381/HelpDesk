@@ -51,6 +51,13 @@
             $notifiacion->ActualizarNotificacionEstadoLeido($_POST["not_id"]);
         break;
         
+        case "contar":
+            if (isset($_POST["user_id"])) {
+                $user_id = $_POST["user_id"];
+                $count = $notificacion->ContarNotificacionPorUsuario2($user_id);
+                echo json_encode(["count" => $count]);
+            }
+        break;
 
     }
 

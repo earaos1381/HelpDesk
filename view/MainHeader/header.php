@@ -17,6 +17,11 @@
 	        <div class="site-header-content">
 	            <div class="site-header-content-in">
 	                <div class="site-header-shown">
+					<div class="dropdown dropdown-typical">
+                            <a href="../Notificacion/" class="dropdown-toggle no-arr">
+                                <span class="label label-pill label-danger">35</span>
+                            </a>
+                        </div>
 						<div class="dropdown dropdown-notification notif">
 							<a href="../Notificacion/" class="header-alarm">
 								<i class="font-icon-alarm"></i>
