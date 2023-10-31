@@ -18,8 +18,8 @@
 	            <div class="site-header-content-in">
 	                <div class="site-header-shown">
 					<div class="dropdown dropdown-typical">
-                            <a href="../Notificacion/" class="dropdown-toggle no-arr">
-                                <span class="label label-pill label-danger">35</span>
+                            <a class="dropdown-toggle no-arr">
+                                <span id="notification-count" class="label label-pill label-danger">#</span>
                             </a>
                         </div>
 						<div class="dropdown dropdown-notification notif">
@@ -55,4 +55,27 @@
 	        </div>
 	    </div>
 	</div>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </header>
+
+<script>
+    $(document).ready(function() {
+        var userId = $("#usuario_id").val();
+
+        $.ajax({
+            type: "POST",
+            url: "../../controller/notificacion.php?op=contar",
+            data: { user_id: userId },
+            dataType: "json",
+            success: function(response) {
+                var count = response.count;
+				$("#notification-count").text(response.count);
+
+            },
+            error: function() {
+                $("#notification-count").text("Error");
+            }
+        });
+    });
+</script>
+

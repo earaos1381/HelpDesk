@@ -44,7 +44,7 @@
                 "aaData" => $data
             );
             echo json_encode($results);
-            break;
+        break;
         
 
         case "leer";
@@ -54,11 +54,10 @@
         case "contar":
             if (isset($_POST["user_id"])) {
                 $user_id = $_POST["user_id"];
-                $count = $notificacion->ContarNotificacionPorUsuario2($user_id);
+                $count = $notifiacion->ContarNotificacionPorUsuario2($user_id);
                 echo json_encode(["count" => $count]);
             }
         break;
-
     }
 
 ?>

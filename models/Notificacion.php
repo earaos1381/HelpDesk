@@ -25,14 +25,15 @@
         }
 
         public function ContarNotificacionPorUsuario2($user_id){
-            $conectar= parent::conexion();
+            $conectar = parent::conexion();
             parent::set_names();
-            $sql="SELECT COUNT(*) FROM notificacion WHERE user_id = ? AND estado != 0;";
-            $sql=$conectar->prepare($sql);
+            $sql = "SELECT COUNT(*) AS count FROM notificacion WHERE user_id = ? AND estado != 0;";
+            $sql = $conectar->prepare($sql);
             $sql->bindValue(1, $user_id);
             $sql->execute();
-            return $resultado=$sql->fetchAll();
-        }
+            $resultado = $sql->fetch(PDO::FETCH_ASSOC);
+            return $resultado['count'];
+        }        
 
         public function ActualizarNotificacionEstado($not_id){
 
