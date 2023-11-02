@@ -14,24 +14,35 @@
                     header("Location:".conectar::ruta()."index.php?m=2");
                     exit();
                 }else{
-                    $sql = "call sp_login(?,?,?)";
+                    $sql = "SELECT * FROM users WHERE user_correo = ? AND id_rol = ? AND estado = 1;";
                     $stmt = $conectar->prepare($sql);
                     $stmt->bindValue(1, $correo);
-                    $stmt->bindValue(2, $password);
-                    $stmt->bindValue(3, $rol);
+                    $stmt->bindValue(2, $rol);
                     $stmt->execute();
                     $resultado = $stmt->fetch();
-                    
-                    if(is_array($resultado) and count($resultado) > 0){
-                        $_SESSION["user_id"] = $resultado["user_id"];
-                        $_SESSION["user_nom"] = $resultado["user_nom"];
-                        $_SESSION["user_ap"] = $resultado["user_ap"];
-                        $_SESSION["id_rol"] = $resultado["id_rol"];
-                        header("Location:".Conectar::ruta()."view/Home/");
-                        exit();
-                    }else{
-                        header("Location:".Conectar::ruta()."index.php?m=1");
-                        exit();
+
+                    if($resultado){
+                        $textocifrado = $resultado["user_password"];
+
+                        $key="mi_key_secret";
+                        $cipher="aes-256-cbc";
+                        $iv_dec = substr(base64_decode( $textocifrado), 0, openssl_cipher_iv_length($cipher));
+                        $cifradoSinIV = substr(base64_decode( $textocifrado), openssl_cipher_iv_length($cipher));
+                        $decifrado = openssl_decrypt($cifradoSinIV, $cipher, $key, OPENSSL_RAW_DATA, $iv_dec);
+                        
+                        if($decifrado==$password){
+                            if(is_array($resultado) and count($resultado) > 0){
+                                $_SESSION["user_id"] = $resultado["user_id"];
+                                $_SESSION["user_nom"] = $resultado["user_nom"];
+                                $_SESSION["user_ap"] = $resultado["user_ap"];
+                                $_SESSION["id_rol"] = $resultado["id_rol"];
+                                header("Location:".Conectar::ruta()."view/Home/");
+                                exit();
+                            }else{
+                                header("Location:".Conectar::ruta()."index.php?m=1");
+                                exit();
+                            }
+                        }
                     }
                 }
                 
@@ -39,29 +50,59 @@
         }
 
         public function crearUsuario($user_nom, $user_ap, $user_correo, $user_password, $id_rol){
-            
+
+            $key="mi_key_secret";
+            $cipher="aes-256-cbc";
+            $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($cipher));
+            $cifrado = openssl_encrypt($user_password, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+            $textoCifrado = base64_encode($iv . $cifrado);
+
             $conectar=parent::conexion();
             parent::set_names();
-            $sql = "call sp_insertar_usuario(?,?,?,?,?)";
+            $sql = "INSERT INTO mesaayuda.users (
+                user_id,
+                user_nom,
+                user_ap,
+                user_correo,
+                user_password,
+                id_rol,
+                fecha_create,
+                fecha_update,
+                fecha_elim,
+                estado) 
+                VALUES (NULL, ?, ?, ?, ?, ?, now(), NULL, NULL, '1');";
             $sql = $conectar->prepare($sql);
             $sql->bindValue(1, $user_nom);
             $sql->bindValue(2, $user_ap);
             $sql->bindValue(3, $user_correo);
-            $sql->bindValue(4, $user_password);
+            $sql->bindValue(4, $textoCifrado);
             $sql->bindValue(5, $id_rol);
             $sql->execute();
             return $resultado = $sql->fetchAll();
         }
 
         public function actualizarUsuario($user_nom, $user_ap, $user_correo, $user_password, $id_rol, $user_id,){
+
+            $key="mi_key_secret";
+            $cipher="aes-256-cbc";
+            $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($cipher));
+            $cifrado = openssl_encrypt($user_password, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+            $textoCifrado = base64_encode($iv . $cifrado);
+
             $conectar=parent::conexion();
             parent::set_names();
-            $sql = "call sp_actualizar_usuario(?,?,?,?,?,?)";
+            $sql = "UPDATE users SET
+            user_nom = ?,
+            user_ap = ?,
+            user_correo = ?,
+            user_password = ?,
+            id_rol = ?
+            WHERE user_id = ?;";
             $sql = $conectar->prepare($sql);
             $sql->bindValue(1, $user_nom);
             $sql->bindValue(2, $user_ap);
             $sql->bindValue(3, $user_correo);
-            $sql->bindValue(4, $user_password);
+            $sql->bindValue(4, $textoCifrado);
             $sql->bindValue(5, $id_rol);
             $sql->bindValue(6, $user_id);
             $sql->execute();

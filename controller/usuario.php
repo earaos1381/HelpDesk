@@ -4,6 +4,10 @@
     
     $usuario = new Usuario();
 
+    $key="mi_key_secret";
+    $cipher="aes-256-cbc";
+    $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($cipher));
+
     switch($_GET["op"]){
         case "guardaryeditar":
             if(empty($_POST["user_id"])){
@@ -11,7 +15,7 @@
                     $usuario->crearUsuario($_POST["user_nom"],$_POST["user_ap"],$_POST["user_correo"],$_POST["user_password"],$_POST["id_rol"]);
 
             } else {
-                $usuario->actualizarUsuario($_POST["user_id"],$_POST["user_nom"],$_POST["user_ap"],$_POST["user_correo"],$_POST["user_password"],$_POST["id_rol"]);
+                $usuario->actualizarUsuario($_POST["user_nom"],$_POST["user_ap"],$_POST["user_correo"],$_POST["user_password"],$_POST["id_rol"],$_POST["user_id"]);
             }
         break;
 
@@ -64,7 +68,12 @@
                     $output["user_nom"] = $row["user_nom"];
                     $output["user_ap"] = $row["user_ap"];
                     $output["user_correo"] = $row["user_correo"];
-                    $output["user_password"] = $row["user_password"];
+
+                    $iv_dec = substr(base64_decode($row["user_password"]), 0, openssl_cipher_iv_length($cipher));
+                    $cifradoSinIV = substr(base64_decode($row["user_password"]), openssl_cipher_iv_length($cipher));
+                    $decifrado = openssl_decrypt($cifradoSinIV, $cipher, $key, OPENSSL_RAW_DATA, $iv_dec);
+
+                    $output["user_password"] = $decifrado;
                     $output["id_rol"] = $row["id_rol"];
                 }
                 echo json_encode($output);
@@ -122,11 +131,10 @@
         break;
 
         case "password":
-            /* $cifrado = openssl_encrypt($_POST["user_password"], $cipher, $key, OPENSSL_RAW_DATA, $iv);
+            $cifrado = openssl_encrypt($_POST["user_password"], $cipher, $key, OPENSSL_RAW_DATA, $iv);
             $textoCifrado = base64_encode($iv . $cifrado);
 
-            $usuario->actualizarPassUsuario($_POST["user_correo"],$textoCifrado); */
-            $usuario->actualizarPassUsuario($_POST["user_password"],$_POST["user_id"]);
+            $usuario->actualizarPassUsuario($_POST["user_id"],$textoCifrado);
         break;
 
         /* case "correo":
