@@ -74,9 +74,9 @@
                     <div class="form-group">
                         <div class="float-left reset">
                             <a href="#" id="btnsoporte">Acceso Soporte</a>
-                        </div>
+                        </div><br>
                         <div class="float-right reset">
-                            <a href="reset-password.html">Cambiar Contraseña</a>
+                            <a href="view/ResetPassword/index.php">Recuperar Contraseña</a>
                         </div>
                     </div>
                     <input type="hidden" name="enviar" class="form-control" value="si">

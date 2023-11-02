@@ -1,6 +1,9 @@
 <?php
-require ('class.phpmailer.php');
-include ("class.smtp.php");
+
+require '../include/vendor/autoload.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 require_once("../config/conexion.php");
 require_once("../Models/Ticket.php");
@@ -22,6 +25,7 @@ class Email extends PHPMailer{
             $ap = $row["user_ap"];
             $titulo = $row["titulo_ticket"];
             $uniadmin = $row["uni_descripcion"];
+            $subuni = $row["subDescripcion"];
             $categoria = $row["cat_descripcion"];
             $correo = $row["user_correo"];
         }
@@ -29,16 +33,15 @@ class Email extends PHPMailer{
                 $this->IsSMTP();
                 $this->Host = 'smtp.office365.com';//Aqui el server
                 $this->Port = 587;//Aqui el puerto 587
-
                 $this->SMTPAuth = true;
+                $this->SMTPSecure = 'tls';
+
                 $this->Username = $this->gCorreo;
                 $this->Password = $this->gContrasena;
-                $this->From = $this->gCorreo;
-                $this->SMTPSecure = 'tls';
-                $this->FromName = $this->gCorreo = "Ticket Abierto #".$id;
+                $this->setFrom($this->gCorreo, "Ticket Abierto #".$id);
+
                 $this->CharSet = 'UTF8';
                 $this->addAddress($correo);
-                $this->WordWrap = 50;
                 $this->IsHTML(true);
                 $this->Subject = "Mesa de Ayuda - Ticket Abierto";
                 
@@ -49,13 +52,20 @@ class Email extends PHPMailer{
                 $cuerpo = str_replace("lblApUsu", $ap, $cuerpo);
                 $cuerpo = str_replace("lblTitu", $titulo, $cuerpo);
                 $cuerpo = str_replace("lblUniAd", $uniadmin, $cuerpo);
+                $cuerpo = str_replace("lblSubUni", $subuni, $cuerpo);
                 $cuerpo = str_replace("lblCate", $categoria, $cuerpo);
         
                 $this->Body = $cuerpo;
                 $this->AltBody = strip_tags("Ticket Abierto");
-                return $this->Send();
-    }
 
+                try{
+                    $this->Send();
+                    /* $usuario->encriptar_nueva_contra($usu_id,$usu_pass); */
+                    return true;
+                }catch(Exception $e){
+                    return false;
+                }
+    }
 
     public function ticket_cerrado($ticket_id){
 
@@ -67,6 +77,7 @@ class Email extends PHPMailer{
             $ap = $row["user_ap"];
             $titulo = $row["titulo_ticket"];
             $uniadmin = $row["uni_descripcion"];
+            $subuni = $row["subDescripcion"];
             $categoria = $row["cat_descripcion"];
             $correo = $row["user_correo"];
         }
@@ -74,18 +85,17 @@ class Email extends PHPMailer{
                 $this->IsSMTP();
                 $this->Host = 'smtp.office365.com';//Aqui el server
                 $this->Port = 587;//Aqui el puerto 587
-
                 $this->SMTPAuth = true;
+                $this->SMTPSecure = 'tls';
+
                 $this->Username = $this->gCorreo;
                 $this->Password = $this->gContrasena;
-                $this->From = $this->gCorreo;
-                $this->SMTPSecure = 'tls';
-                $this->FromName = $this->gCorreo = "Ticket Cerrado #".$id;
+                $this->setFrom($this->gCorreo, "Ticket Cerrado #".$id);
+                
                 $this->CharSet = 'UTF8';
                 $this->addAddress($correo);
-                $this->WordWrap = 50;
                 $this->IsHTML(true);
-                $this->Subject = "Ticket Cerrado";
+                $this->Subject = "Mesa de Ayuda - Ticket Cerrado";
                 
                 $cuerpo = file_get_contents('../public/CerradoTicket.html'); 
                 
@@ -94,13 +104,19 @@ class Email extends PHPMailer{
                 $cuerpo = str_replace("lblApUsu", $ap, $cuerpo);
                 $cuerpo = str_replace("lblTitu", $titulo, $cuerpo);
                 $cuerpo = str_replace("lblUniAd", $uniadmin, $cuerpo);
+                $cuerpo = str_replace("lblSubUni", $subuni, $cuerpo);
                 $cuerpo = str_replace("lblCate", $categoria, $cuerpo);
         
                 $this->Body = $cuerpo;
                 $this->AltBody = strip_tags("Ticket Cerrado");
-                return $this->Send();
+                try{
+                    $this->Send();
+                    /* $usuario->encriptar_nueva_contra($usu_id,$usu_pass); */
+                    return true;
+                }catch(Exception $e){
+                    return false;
+                }
     }
-
 
     public function ticket_asignado($ticket_id){
 
@@ -112,6 +128,7 @@ class Email extends PHPMailer{
             $ap = $row["user_ap"];
             $titulo = $row["titulo_ticket"];
             $uniadmin = $row["uni_descripcion"];
+            $subuni = $row["subDescripcion"];
             $categoria = $row["cat_descripcion"];
             $correo = $row["user_correo"];
         }
@@ -119,18 +136,17 @@ class Email extends PHPMailer{
                 $this->IsSMTP();
                 $this->Host = 'smtp.office365.com';//Aqui el server
                 $this->Port = 587;//Aqui el puerto 587
-
                 $this->SMTPAuth = true;
+                $this->SMTPSecure = 'tls';
+
                 $this->Username = $this->gCorreo;
                 $this->Password = $this->gContrasena;
-                $this->From = $this->gCorreo;
-                $this->SMTPSecure = 'tls';
-                $this->FromName = $this->gCorreo = "Ticket Asignado #".$id;
+                $this->setFrom($this->gCorreo, "Ticket Asignado #".$id);
+                
                 $this->CharSet = 'UTF8';
                 $this->addAddress($correo);
-                $this->WordWrap = 50;
                 $this->IsHTML(true);
-                $this->Subject = "Ticket Asignado";
+                $this->Subject = "Mesa de Ayuda - Ticket Asignado";
                 
                 $cuerpo = file_get_contents('../public/AsignarTicket.html'); 
                 
@@ -139,29 +155,36 @@ class Email extends PHPMailer{
                 $cuerpo = str_replace("lblApUsu", $ap, $cuerpo);
                 $cuerpo = str_replace("lblTitu", $titulo, $cuerpo);
                 $cuerpo = str_replace("lblUniAd", $uniadmin, $cuerpo);
+                $cuerpo = str_replace("lblSubUni", $subuni, $cuerpo);
                 $cuerpo = str_replace("lblCate", $categoria, $cuerpo);
         
                 $this->Body = $cuerpo;
                 $this->AltBody = strip_tags("Ticket Asignado");
-                return $this->Send();
+                try{
+                    $this->Send();
+                    /* $usuario->encriptar_nueva_contra($usu_id,$usu_pass); */
+                    return true;
+                }catch(Exception $e){
+                    return false;
+                }
     }
 
-    /* public function recuperar_contrasena($usu_correo){
+    public function recuperar_contrasena($user_correo){
         $usuario = new Usuario();
 
-        $usuario->get_cambiar_contra_recuperar($usu_correo);
+        $usuario->cambiarContraRecuperar($user_correo);
 
-        $datos = $usuario->get_usuario_x_correo($usu_correo);
+        $datos = $usuario->obtenerUsuarioCorreo($user_correo);
         foreach ($datos as $row){
-            $usu_id = $row["usu_id"];
-            $usu_ape = $row["usu_ape"];
-            $usu_nom = $row["usu_nom"];
-            $correo = $row["usu_correo"];
-            $usu_pass= $row["usu_pass"];
+            $user_id = $row["user_id"];
+            $user_ap = $row["user_ap"];
+            $user_nom = $row["user_nom"];
+            $correo = $row["user_correo"];
+            $user_password= $row["user_password"];
         }
 
         $this->IsSMTP();
-        $this->Host = 'smtp.hostinger.com';
+        $this->Host = 'smtp.office365.com';
         $this->Port = 587;
         $this->SMTPAuth = true;
         $this->SMTPSecure = 'tls';
@@ -173,25 +196,25 @@ class Email extends PHPMailer{
         $this->CharSet = 'UTF8';
         $this->addAddress($correo);
         $this->IsHTML(true);
-        $this->Subject = "Recuperar Contraseña";
+        $this->Subject = "Mesa de Ayuda - Recuperar Contraseña";
         
         $cuerpo = file_get_contents('../public/RecuperarContra.html'); 
 
-        $cuerpo = str_replace("xusunom", $usu_nom, $cuerpo);
-        $cuerpo = str_replace("xusuape", $usu_ape, $cuerpo);
-        $cuerpo = str_replace("xnuevopass", $usu_pass, $cuerpo);
+        $cuerpo = str_replace("xusunom", $user_nom, $cuerpo);
+        $cuerpo = str_replace("xusuape", $user_ap, $cuerpo);
+        $cuerpo = str_replace("xnuevopass", $user_password, $cuerpo);
 
         $this->Body = $cuerpo;
         $this->AltBody = strip_tags("Recuperar Contraseña");
 
         try{
             $this->Send();
-            $usuario->encriptar_nueva_contra($usu_id,$usu_pass);
+            $usuario->encriptarNuevaContra($user_password,$user_id);
             return true;
         }catch(Exception $e){
             return false;
         }
-    } */
+    }
 
 }
 

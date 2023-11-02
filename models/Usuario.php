@@ -10,7 +10,7 @@
                 $password = $_POST["user_password"];
                 $rol = $_POST["id_rol"];
 
-                if(empty($correo) or empty($password)){
+                if(empty($correo) || empty($password)){
                     header("Location:".conectar::ruta()."index.php?m=2");
                     exit();
                 }else{
@@ -24,14 +24,14 @@
                     if($resultado){
                         $textocifrado = $resultado["user_password"];
 
-                        $key="mi_key_secret";
+                        $key="yG(E_ZiC3e/=!5)s4MS6CCH4e\Q.l";
                         $cipher="aes-256-cbc";
                         $iv_dec = substr(base64_decode( $textocifrado), 0, openssl_cipher_iv_length($cipher));
                         $cifradoSinIV = substr(base64_decode( $textocifrado), openssl_cipher_iv_length($cipher));
                         $decifrado = openssl_decrypt($cifradoSinIV, $cipher, $key, OPENSSL_RAW_DATA, $iv_dec);
                         
                         if($decifrado==$password){
-                            if(is_array($resultado) and count($resultado) > 0){
+                            if(is_array($resultado) && count($resultado) > 0){
                                 $_SESSION["user_id"] = $resultado["user_id"];
                                 $_SESSION["user_nom"] = $resultado["user_nom"];
                                 $_SESSION["user_ap"] = $resultado["user_ap"];
@@ -44,6 +44,9 @@
                             }
                         }
                     }
+                    
+                    header("Location:".Conectar::ruta()."index.php?m=1");
+                    exit();
                 }
                 
             }
@@ -51,7 +54,7 @@
 
         public function crearUsuario($user_nom, $user_ap, $user_correo, $user_password, $id_rol){
 
-            $key="mi_key_secret";
+            $key="yG(E_ZiC3e/=!5)s4MS6CCH4e\Q.l";
             $cipher="aes-256-cbc";
             $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($cipher));
             $cifrado = openssl_encrypt($user_password, $cipher, $key, OPENSSL_RAW_DATA, $iv);
@@ -83,7 +86,7 @@
 
         public function actualizarUsuario($user_nom, $user_ap, $user_correo, $user_password, $id_rol, $user_id,){
 
-            $key="mi_key_secret";
+            $key="yG(E_ZiC3e/=!5)s4MS6CCH4e\Q.l";
             $cipher="aes-256-cbc";
             $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($cipher));
             $cifrado = openssl_encrypt($user_password, $cipher, $key, OPENSSL_RAW_DATA, $iv);
@@ -187,11 +190,15 @@
             return $resultado=$sql->fetchAll();
         }
 
-        public function actualizarPassUsuario($user_password, $user_id){
+        public function actualizarPassUsuario($user_password,$user_id){
 
             $conectar= parent::conexion();
             parent::set_names();
-            $sql="call sp_actualizar_contraseña_user(?,?)";
+            $sql="UPDATE users
+            SET
+                user_password = ?
+            WHERE
+                user_id = ?;";
             $sql=$conectar->prepare($sql);
             $sql->bindValue(1, $user_password);
             $sql->bindValue(2, $user_id);
@@ -199,51 +206,51 @@
             return $resultado=$sql->fetchAll();
         }
 
-/*         public function get_usuario_x_correo($usu_correo){
+        public function obtenerUsuarioCorreo($user_correo){
             $conectar= parent::conexion();
             parent::set_names();
-            $sql="SELECT * FROM tm_usuario WHERE usu_correo=?";
+            $sql="SELECT * FROM users WHERE user_correo = ?";
             $sql=$conectar->prepare($sql);
-            $sql->bindValue(1, $usu_correo);
+            $sql->bindValue(1, $user_correo);
             $sql->execute();
             return $resultado=$sql->fetchAll();
         }
-
-        public function get_cambiar_contra_recuperar($usu_correo){
+ 
+        public function cambiarContraRecuperar($user_correo){
             $conectar= parent::conexion();
             parent::set_names();
             $sql="UPDATE
-                tm_usuario
+                    users
                     SET
-                usu_pass=CONCAT(SUBSTRING(MD5(RAND()),1,3),LPAD(FLOOR(RAND()*1000),3,'0'))
+                    user_password=CONCAT(SUBSTRING(MD5(RAND()),1,6),LPAD(FLOOR(RAND()*1000),6,'0'))
                     WHERE
-                usu_correo=?";
+                    user_correo=?";
             $sql=$conectar->prepare($sql);
-            $sql->bindValue(1, $usu_correo);
+            $sql->bindValue(1, $user_correo);
             $sql->execute();
             return $resultado=$sql->fetchAll();
         }
 
-        public function encriptar_nueva_contra($usu_id,$usu_pass){
+        public function encriptarNuevaContra($user_password, $user_id){
 
-            $key="mi_key_secret";
+            $key="yG(E_ZiC3e/=!5)s4MS6CCH4e\Q.l";
             $cipher="aes-256-cbc";
             $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($cipher));
-            $cifrado = openssl_encrypt($usu_pass, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+            $cifrado = openssl_encrypt($user_password, $cipher, $key, OPENSSL_RAW_DATA, $iv);
             $textoCifrado = base64_encode($iv . $cifrado);
 
             $conectar= parent::conexion();
             parent::set_names();
-            $sql="UPDATE tm_usuario set
-                usu_pass = ?
-                WHERE
-                usu_id = ?";
+            $sql="UPDATE users set
+                    user_password = ?
+                    WHERE
+                    user_id = ?";
             $sql=$conectar->prepare($sql);
             $sql->bindValue(1, $textoCifrado);
-            $sql->bindValue(2, $usu_id);
+            $sql->bindValue(2, $user_id);
             $sql->execute();
             return $resultado=$sql->fetchAll();
-        } */
+        } 
     }
 
 ?>

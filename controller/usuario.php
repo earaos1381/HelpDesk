@@ -4,7 +4,7 @@
     
     $usuario = new Usuario();
 
-    $key="mi_key_secret";
+    $key="yG(E_ZiC3e/=!5)s4MS6CCH4e\Q.l";
     $cipher="aes-256-cbc";
     $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($cipher));
 
@@ -54,7 +54,6 @@
 
         break;
             
-
         case "eliminar":
             $usuario->eliminarUsuario($_POST["user_id"]);
         break;
@@ -134,17 +133,16 @@
             $cifrado = openssl_encrypt($_POST["user_password"], $cipher, $key, OPENSSL_RAW_DATA, $iv);
             $textoCifrado = base64_encode($iv . $cifrado);
 
-            $usuario->actualizarPassUsuario($_POST["user_id"],$textoCifrado);
+            $usuario->actualizarPassUsuario($textoCifrado,$_POST["user_id"]);
         break;
 
-        /* case "correo":
-            $datos=$usuario->get_usuario_x_correo($_POST["usu_correo"]);
-            if(is_array($datos)==true and count($datos)>0){
-
+        case "correo":
+            $datos = $usuario->obtenerUsuarioCorreo($_POST["user_correo"]);
+            if(is_array($datos) == true and count($datos) > 0){
                 echo "Existe";
             }else{
                 echo "Error";
             }
-        break; */
+        break;
     }
 ?>

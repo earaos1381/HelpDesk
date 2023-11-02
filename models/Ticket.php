@@ -113,12 +113,14 @@
 
             if($_SESSION["id_rol"] == 1){
 
-                $sql0 = "INSERT INTO notificacion (not_id, user_id, mensaje, ticket_id, estado) VALUES (NULL, $usu_asig, 'Tienes una nueva respuesta del Usuario - Ticket: # ', $ticket_id, 2)";
+                $sql0 = "INSERT INTO notificacion (not_id, user_id, mensaje, 
+                ticket_id, estado) VALUES (NULL, $usu_asig, 'Tienes una nueva respuesta del Usuario - Ticket: # ', $ticket_id, 2)";
                 $sql0=$conectar->prepare($sql0);
                 $sql0->execute();    
 
             } else {
-                $sql0 = "INSERT INTO notificacion (not_id, user_id, mensaje, ticket_id, estado) VALUES (NULL, $usu_crea, 'Tienes una nueva respuesta del Soporte - Ticket: # ', $ticket_id, 2)";
+                $sql0 = "INSERT INTO notificacion (not_id, user_id, mensaje, 
+                ticket_id, estado) VALUES (NULL, $usu_crea, 'Tienes una nueva respuesta del Soporte - Ticket: # ', $ticket_id, 2)";
                 $sql0=$conectar->prepare($sql0);
                 $sql0->execute();  
             }
