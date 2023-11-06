@@ -27,7 +27,6 @@
                 $sub_array[] = $row["user_nom"];
                 $sub_array[] = $row["user_ap"];
                 $sub_array[] = $row["user_correo"];
-                /* $sub_array[] = $row["user_password"]; */
         
                 if ($row["id_rol"] == "1") {
                     $sub_array[] = '<span class="label label-pill label-success">Usuario</span>';

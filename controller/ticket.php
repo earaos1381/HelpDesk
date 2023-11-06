@@ -65,7 +65,6 @@
 
         case "asignar":
             $ticket->actualizarTicketAsignacion($_POST["user_asig"] ,$_POST["ticket_id"]);
-            
         break;
 
         case "listarUser": //lista ticker de usuario normal
@@ -134,73 +133,6 @@
                 "aaData"=>$data);
             echo json_encode($results);    
         break;
-
-        /* case "listar": //listar por rol - ESTE FUNCIONA PERO SERA HISTORICO
-            $datos = $ticket->ListarTicket($_SESSION["id_rol"]);
-            $data= Array();
-            foreach($datos as $row){
-                $sub_array = array(); //Columnas
-                $sub_array[] = $row["ticket_id"];
-                $sub_array[] = $row["uni_descripcion"];
-                $sub_array[] = $row["cat_descripcion"];
-                $sub_array[] = $row["titulo_ticket"];
-
-                $priority_label = '';
-                switch ($row["prio_descrip"]) {
-                    case 'Alta':
-                        $priority_label = '<span class="label label-pill label-danger">Alta</span>';
-                        break;
-                    case 'Media':
-                        $priority_label = '<span class="label label-pill label-warning">Media</span>';
-                        break;
-                    case 'Baja':
-                        $priority_label = '<span class="label label-pill label-primary">Baja</span>';
-                        break;
-                    default:
-                        $priority_label = $row["prio_descrip"]; 
-                }
-                $sub_array[] = $priority_label;
-
-                if($row["estado_ticket"] == "Abierto"){
-                    $sub_array[] = '<span class="label label-pill label-success">Abierto</span>';
-                } else {
-                    $sub_array[] = '<a onClick="CambiarEstado('.$row["ticket_id"].')"><span class="label label-pill label-danger">Cerrado</span></a>';
-                }
-                
-                $sub_array[] = date("d/m/Y - H:i:s", strtotime($row["fecha_create"]));
-
-                if($row["fech_asig"] == NULL){
-                    $sub_array[] = '<span class="label label-pill label-default">Sin Asignar</span>';
-                } else {
-                    $sub_array[] = date("d/m/Y - H:i:s", strtotime($row["fech_asig"]));
-                }
-
-                if($row["fech_cierre"] == NULL){
-                    $sub_array[] = '<span class="label label-pill label-default">Sin Cerrar</span>';
-                } else {
-                    $sub_array[] = date("d/m/Y - H:i:s", strtotime($row["fech_cierre"]));
-                }
-
-                if($row["user_asig"] == NULL){
-                    $sub_array[] = '<a onClick="asignar('.$row["ticket_id"].');"><span class="label label-pill label-warning">Sin asignar</span></a>';
-                } else {
-                    $datos1 = $usuario->obtenerUsuarioId($row["user_asig"]);
-                    foreach ($datos1 as $row1){
-                        $sub_array[] = '<span class="label label-pill label-success">'. $row1["user_nom"] . ' ' . $row1["user_ap"] .'</span>';
-                    }
-                }
-
-                $sub_array[] ='<button type="button" onClick="ver('.$row["ticket_id"].');" id="'.$row["ticket_id"].'" class="btn btn-inline btn-primary btn-sm ladda-button"><i class="fa fa-eye"></i></button>';
-                $data[] = $sub_array;
-            }
-
-            $results = array(
-                "sEcho"=>1,
-                "iTotalRecords"=>count($data),
-                "itotalDisplayRecords"=>count($data),
-                "aaData"=>$data);
-            echo json_encode($results);    
-        break; */
 
         case "listar_filtro":
 
@@ -355,17 +287,7 @@
                     $output["titulo_ticket"] = $row["titulo_ticket"];
                     $output["descripcion"] = $row["descripcion"];
                     $output["prio_descrip"] = $row["prio_descrip"];
-                    /* $priority_mapping = array(
-                        'Alta' => '<span class="label label-pill label-danger">Alta</span>',
-                        'Media' => '<span class="label label-pill label-warning">Media</span>',
-                        'Baja' => '<span class="label label-pill label-primary">Baja</span>'
-                    );
-                    $output["priority_label"] = $priority_mapping[$row["prio_descrip"]] ?? $row["prio_descrip"]; */
-
-                                
-
-
-
+        
                     if ($row["estado_ticket"]=="Abierto"){
                         $output["estado_ticket"] = '<span class="label label-pill label-success">Abierto</span>';
                     } else{

@@ -92,8 +92,7 @@ $(document).ready(function(){
 });
 
 function ver(ticket_id){ //modificaciones
-        var nuevaVentana = window.open('http://localhost/mesaayuda/view/DetalleTicket/?id='+ ticket_id +'');
-
+        window.open('http://localhost/mesaayuda/view/DetalleTicket/?id='+ ticket_id +'');
         window.close();
 }
 
