@@ -10,6 +10,10 @@
     require_once("../models/Documento.php");
     $documento = new Documento();
 
+    $key="yG(E_ZiC3e/=!5)s4MS6CCH4e\Q.l";
+    $cipher="aes-256-cbc";
+    $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($cipher));
+
     switch($_GET["op"]){
 
         case "guardar":
@@ -52,9 +56,15 @@
             echo json_encode($data);
         break;
 
-        case "actualizar":
-            $ticket->actualizarTicket($_POST["ticket_id"]);
-            $ticket->InsertarTicketDetalleCerrado($_POST["ticket_id"],$_POST["user_id"]);
+        case "actualizar": //Cifrado
+            
+            //DECIFRADO NO. TICKET
+            $iv_dec = substr(base64_decode($_POST["ticket_id"]), 0, openssl_cipher_iv_length($cipher));
+            $cifradoSinIV = substr(base64_decode($_POST["ticket_id"]), openssl_cipher_iv_length($cipher));
+            $decifrado = openssl_decrypt($cifradoSinIV, $cipher, $key, OPENSSL_RAW_DATA, $iv_dec);
+
+            $ticket->actualizarTicket($decifrado);
+            $ticket->InsertarTicketDetalleCerrado($decifrado,$_POST["user_id"]);
             
         break;
 
@@ -64,10 +74,11 @@
         break;
 
         case "asignar":
-            $ticket->actualizarTicketAsignacion($_POST["user_asig"] ,$_POST["ticket_id"]);
+            $ticket->actualizarTicketAsignacion($_POST["user_asig"], $_POST["ticket_id"]);
         break;
 
-        case "listarUser": //lista ticker de usuario normal
+        case "listarUser": //Cifrado
+
             $datos = $ticket->ListarTicketPorUser($_POST["user_id"]);
             $data= Array();
             foreach($datos as $row){
@@ -121,8 +132,14 @@
                         $sub_array[] = '<span class="label label-pill label-success">'. $row1["user_nom"] .' '. $row1["user_ap"] .'</span>';
                     }
                 }
+                
+                //CIFRADO NO. TICKET
+                $cifrado = openssl_encrypt($row["ticket_id"], $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                $textoCifrado = base64_encode($iv . $cifrado);
 
-                $sub_array[] ='<button type="button" onClick="ver('.$row["ticket_id"].');" id="'.$row["ticket_id"].'" class="btn btn-inline btn-primary btn-sm ladda-button"><i class="fa fa-eye"></i></button>';
+                $sub_array[] = '<button type="button" data-ciphertext="'.$textoCifrado.'" id="'.$textoCifrado.'" class="btn btn-inline btn-primary btn-sm ladda-button"><i class="fa fa-eye"></i></button>';
+                    
+                //$sub_array[] ='<button type="button" onClick="ver('.$row["ticket_id"].');" id="'.$row["ticket_id"].'" class="btn btn-inline btn-primary btn-sm ladda-button"><i class="fa fa-eye"></i></button>';
                 $data[] = $sub_array;
             }
 
@@ -134,8 +151,8 @@
             echo json_encode($results);    
         break;
 
-        case "listar_filtro":
-
+        case "listar_filtro": //Cifrado
+            
             if (isset($_POST["titulo_ticket"])) {
                 $_SESSION["titulo_ticket"] = $_POST["titulo_ticket"];
             } else {
@@ -163,7 +180,8 @@
             );
             $data = Array();
         
-            foreach($datos as $row){
+            foreach($datos as $row){  
+
                 $sub_array = array(); //Columnas
                 $sub_array[] = $row["ticket_id"];
                 $sub_array[] = $row["uni_descripcion"];
@@ -206,7 +224,7 @@
                     $sub_array[] = date("d/m/Y - H:i:s", strtotime($row["fech_cierre"]));
                 }
 
-                if($row["user_asig"] == NULL){
+                if($row["user_asig"] == NULL){//boton para asignar
                     $sub_array[] = '<a onClick="asignar('.$row["ticket_id"].');"><span class="label label-pill label-warning">Sin asignar</span></a>';
                 } else {
                     $datos1 = $usuario->obtenerUsuarioId($row["user_asig"]);
@@ -215,7 +233,13 @@
                     }
                 }
 
-                $sub_array[] ='<button type="button" onClick="ver('.$row["ticket_id"].');" id="'.$row["ticket_id"].'" class="btn btn-inline btn-primary btn-sm ladda-button"><i class="fa fa-eye"></i></button>';
+                //CIFRADO NO. TICKET
+                $cifrado = openssl_encrypt($row["ticket_id"], $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                $textoCifrado = base64_encode($iv . $cifrado);
+
+                $sub_array[] = '<button type="button" data-ciphertext="'.$textoCifrado.'" id="'.$textoCifrado.'" class="btn btn-inline btn-primary btn-sm ladda-button"><i class="fa fa-eye"></i></button>';
+                
+                //$sub_array[] ='<button type="button" onClick="ver('.$row["ticket_id"].');" id="'.$row["ticket_id"].'" class="btn btn-inline btn-primary btn-sm ladda-button"><i class="fa fa-eye"></i></button>';
                 $data[] = $sub_array;
             }
 
@@ -227,8 +251,14 @@
             echo json_encode($results);    
         break;
 
-        case "listarDetalle":
-            $datos = $ticket->DetalleTicket($_POST["ticket_id"]);
+        case "listarDetalle": //Cifrado
+
+            //DECIFRADO DETALLE TICKET
+            $iv_dec = substr(base64_decode($_POST["ticket_id"]), 0, openssl_cipher_iv_length($cipher));
+            $cifradoSinIV = substr(base64_decode($_POST["ticket_id"]), openssl_cipher_iv_length($cipher));
+            $decifrado = openssl_decrypt($cifradoSinIV, $cipher, $key, OPENSSL_RAW_DATA, $iv_dec);
+
+            $datos = $ticket->DetalleTicket($decifrado);
             ?>
                 <?php
                     foreach($datos as $row){
@@ -273,7 +303,45 @@
             <?php
         break;
 
-        case "mostrar":
+        case "mostrar": //Cifrado
+
+            //DECIFRADO NO. TICKET
+            $iv_dec = substr(base64_decode($_POST["ticket_id"]), 0, openssl_cipher_iv_length($cipher));
+            $cifradoSinIV = substr(base64_decode($_POST["ticket_id"]), openssl_cipher_iv_length($cipher));
+            $decifrado = openssl_decrypt($cifradoSinIV, $cipher, $key, OPENSSL_RAW_DATA, $iv_dec);
+            
+            //$datos = $ticket->ListarTicketPorID($_POST["ticket_id"]);
+            $datos = $ticket->ListarTicketPorID($decifrado);
+
+            if (is_array($datos) == true and count($datos) > 0){
+                foreach($datos as $row)
+                {
+                    $output["ticket_id"] = $row["ticket_id"];
+                    $output["user_id"] = $row["user_id"];
+                    $output["id_uniadmin"] = $row["id_uniadmin"];
+                    $output["subUni_id"] = $row["subUni_id"];
+                    $output["id_categoria"] = $row["id_categoria"];
+                    $output["titulo_ticket"] = $row["titulo_ticket"];
+                    $output["descripcion"] = $row["descripcion"];
+                    $output["prio_descrip"] = $row["prio_descrip"];
+                    if ($row["estado_ticket"]=="Abierto"){
+                        $output["estado_ticket"] = '<span class="label label-pill label-success">Abierto</span>';
+                    } else{
+                        $output["estado_ticket"] = '<span class="label label-pill label-danger">Cerrado</span>';
+                    }
+                    $output["estado_ticket_texto"] = $row["estado_ticket"];
+                    $output["fecha_create"] = date("d/m/Y - H:i:s", strtotime($row["fecha_create"]));
+                    $output["fecha_create"] = date("d/m/Y - H:i:s", strtotime($row["fecha_create"]));
+                    $output["user_nom"] = $row["user_nom"];
+                    $output["user_ap"] = $row["user_ap"];                 
+                    $output["uni_descripcion"] = $row["uni_descripcion"];
+                    $output["subDescripcion"] = $row["subDescripcion"];
+                    $output["cat_descripcion"] = $row["cat_descripcion"];
+                }
+                echo json_encode($output);
+            }
+        break;
+        case "mostrarNo": 
             
             $datos = $ticket->ListarTicketPorID($_POST["ticket_id"]);
             if (is_array($datos) == true and count($datos) > 0){
@@ -287,13 +355,11 @@
                     $output["titulo_ticket"] = $row["titulo_ticket"];
                     $output["descripcion"] = $row["descripcion"];
                     $output["prio_descrip"] = $row["prio_descrip"];
-        
                     if ($row["estado_ticket"]=="Abierto"){
                         $output["estado_ticket"] = '<span class="label label-pill label-success">Abierto</span>';
                     } else{
                         $output["estado_ticket"] = '<span class="label label-pill label-danger">Cerrado</span>';
                     }
-
                     $output["estado_ticket_texto"] = $row["estado_ticket"];
                     $output["fecha_create"] = date("d/m/Y - H:i:s", strtotime($row["fecha_create"]));
                     $output["fecha_create"] = date("d/m/Y - H:i:s", strtotime($row["fecha_create"]));
@@ -307,8 +373,14 @@
             }
         break;
 
-        case "guardarDetalle":
-            $ticket->InsertarTicketDetalle($_POST["ticket_id"],$_POST["user_id"],$_POST["descripcion"]);
+        case "guardarDetalle": //Cifrado
+
+            //DECIFRADO NO. TICKET
+            $iv_dec = substr(base64_decode($_POST["ticket_id"]), 0, openssl_cipher_iv_length($cipher));
+            $cifradoSinIV = substr(base64_decode($_POST["ticket_id"]), openssl_cipher_iv_length($cipher));
+            $decifrado = openssl_decrypt($cifradoSinIV, $cipher, $key, OPENSSL_RAW_DATA, $iv_dec);
+            
+            $ticket->InsertarTicketDetalle($decifrado, $_POST["user_id"],$_POST["descripcion"]);
         break;
 
         case "total":

@@ -56,26 +56,13 @@ $(document).ready(function(){
     }).DataTable(); 
 });
 
-/* $(document).on("click",".btn-inline",function(){
+$(document).on("click",".btn-inline",function(){
     const ciphertext = $(this).data("ciphertext");
-    window.open('http://localhost/mesaayuda/view/DetalleTicket/?id='+ ciphertext +'');
-}); */
+    const not_id = $(this).data("not_id");
 
-/* function ver(ticket_id){ //modificaciones
-    
-    window.open('http://localhost/mesaayuda/view/DetalleTicket/?id='+ ticket_id +'');
-
-    window.close();
-} */
-
-$(document).on("click", ".btn-ver", function () {
-    const not_id = $(this).data("not_id"); 
-    const ticket_id = $(this).data("ticket_id"); 
-
-    ver(not_id, ticket_id);
-});
-
-function ver(not_id, ticket_id) {
+    window.location.href = 'http://localhost/mesaayuda/view/DetalleTicket/?id='+ ciphertext;
+    //window.open('http://localhost/mesaayuda/view/DetalleTicket/?id='+ ciphertext +'');
+    //window.close();
 
     $.ajax({
         type: "POST",
@@ -83,20 +70,10 @@ function ver(not_id, ticket_id) {
         data: { not_id: not_id },
         success: function (response) {
             console.log("Estado de la notificación cambiado con éxito.");
-            abrirTicket(ticket_id);
+            abrirTicket(ciphertext);
         },
         error: function (xhr, status, error) {
             console.error("Error al cambiar el estado de la notificación: " + error);
         }
     });
-}
-
-
-function abrirTicket(ticket_id) {
-    window.open('http://localhost/mesaayuda/view/DetalleTicket/?id=' + ticket_id);
-    window.close();
-}
-
-
-
-
+});

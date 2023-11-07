@@ -19,13 +19,11 @@ $(document).ready(function(){
         $('#id_prioridad').html(data);
     });
 
-
     $.post("../../controller/usuario.php?op=combo", function(data) { 
         $('#user_asig').html(data);
     });
 
     
-
     if(rolID == 1){
         tabla = $('#ticket_data').dataTable({
             "aProcessing": true,
@@ -81,7 +79,6 @@ $(document).ready(function(){
         }).DataTable(); 
 
     } else {
-
         var titulo_ticket = $('#titulo_ticket').val();
         var id_categoria = $('#id_categoria').val();
         var id_prioridad = $('#id_prioridad').val();
@@ -91,23 +88,28 @@ $(document).ready(function(){
     }
 });
 
-function ver(ticket_id){ //modificaciones
-        window.open('http://localhost/mesaayuda/view/DetalleTicket/?id='+ ticket_id +'');
-        window.close();
-}
+//Cifrado
+$(document).on("click",".btn-inline",function(){
+    const ciphertext = $(this).data("ciphertext");
+    /* window.open('http://localhost/mesaayuda/view/DetalleTicket/?id='+ ciphertext +'');
+    window.close();
+ */
+    window.location.href = 'http://localhost/mesaayuda/view/DetalleTicket/?id='+ ciphertext;
+});
 
 function asignar (ticket_id){
-    $.post("../../controller/ticket.php?op=mostrar",{ticket_id : ticket_id}, function(data) { 
+    console.log(ticket_id);
+    $.post("../../controller/ticket.php?op=mostrarNo",{ticket_id : ticket_id}, function(data) { 
         data = JSON.parse(data);
         $('#ticket_id').val(data.ticket_id);
 
         $('#mdltitulo').html('Asignar Soporte');
         $('#modalasignar').modal('show');
     });
-    
 }
 
 function guardar(e){
+    
     e.preventDefault();
 	var formData = new FormData($("#ticket_form")[0]);
     $.ajax({
@@ -117,7 +119,7 @@ function guardar(e){
         contentType: false,
         processData: false,
         success: function(datos){
-
+                        
             var ticket_id = $('#ticket_id').val();
             $.post("../../controller/email.php?op=ticket_asignado", {ticket_id : ticket_id}, function(data){ 
 
@@ -186,7 +188,6 @@ $(document).on("click","#btntodo", function(){
 
     listardatatable('','','');
 });
-
 
 function listardatatable(titulo_ticket, id_categoria, id_prioridad, user_id) {
     tabla = $('#ticket_data').dataTable({

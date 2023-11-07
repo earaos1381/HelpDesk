@@ -117,6 +117,7 @@
         break;
 
         case "combo"; //para obtener solo los roles de soporte
+        
             $datos = $usuario->obtenerUsuarioPorRol(); 
             if(is_array($datos) == true and count($datos) > 0){
                 $html.= "<option label = 'Seleccionar'></option>";

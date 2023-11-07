@@ -4,6 +4,10 @@
     
     $notifiacion = new Notificacion();
 
+    $key="yG(E_ZiC3e/=!5)s4MS6CCH4e\Q.l";
+    $cipher="aes-256-cbc";
+    $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($cipher));
+
     switch($_GET["op"]){
         
         case "mostrar";
@@ -33,7 +37,15 @@
                 $not_id = $row["not_id"];
                 $ticket_id = $row["ticket_id"];
                 $sub_array[] = $row["mensaje"] . ' ' . $ticket_id;
-                $sub_array[] = '<button type="button" onClick="ver(' . $not_id . ',' . $ticket_id . ')" data-not_id="' . $not_id . '" data-ticket_id="' . $ticket_id . '" class="btn btn-inline btn-primary btn-sm ladda-button"><i class="fa fa-eye"></i></button>';
+                
+                //CIFRADO NO. TICKET
+                $cifrado = openssl_encrypt($row["ticket_id"], $cipher, $key, OPENSSL_RAW_DATA, $iv);
+                $textoCifrado = base64_encode($iv . $cifrado);
+
+                //$sub_array[] = '<button type="button" data-ciphertext="'.$textoCifrado.'" id="'.$textoCifrado.'" class="btn btn-inline btn-primary btn-sm ladda-button"><i class="fa fa-eye"></i></button>';
+                $sub_array[] = '<button type="button" data-ciphertext="'.$textoCifrado.'" data-not_id="'.$not_id.'" class="btn btn-inline btn-primary btn-sm ladda-button"><i class="fa fa-eye"></i></button>';
+
+                
                 $data[] = $sub_array;
             }
         

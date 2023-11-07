@@ -37,7 +37,33 @@
         public function ListarTicketPorID($ticket_id){
             $conectar=parent::conexion();
             parent::set_names();
-            $sql = "call sp_listar_ticketID(?)";
+            $sql = "SELECT 
+            tickets.ticket_id, 
+            tickets.user_id,
+            tickets.id_uniadmin,
+            tickets.subUni_id,
+            tickets.id_categoria, 
+            tickets.titulo_ticket, 
+            tickets.descripcion,
+            tickets.estado_ticket, 
+            tickets.fecha_create,
+                  tickets.id_prioridad,
+                  tickets.user_asig,
+            users.user_nom, 
+            users.user_ap,
+                  users.user_correo, 
+            categorias.cat_descripcion,
+            unidadesadmin.uni_descripcion,
+            sub_unidadesadmin.subDescripcion,
+            prioridad.prio_descrip
+            FROM tickets
+            INNER JOIN unidadesadmin ON tickets.id_uniadmin = unidadesadmin.id_uniadmin
+                  LEFT JOIN sub_unidadesadmin ON tickets.subUni_id = sub_unidadesadmin.subUni_id   
+            INNER JOIN categorias ON tickets.id_categoria = categorias.cat_id
+            INNER JOIN prioridad ON tickets.id_prioridad = prioridad.id_prioridad
+            INNER JOIN users ON tickets.user_id = users.user_id
+            WHERE tickets.estado = 1
+            AND tickets.ticket_id = ?";
             $sql = $conectar->prepare($sql);
             $sql->bindValue(1, $ticket_id);
             $sql->execute();
@@ -92,7 +118,16 @@
         public function DetalleTicket($ticket_id){
             $conectar=parent::conexion();
             parent::set_names();
-            $sql = "call sp_detalle_ticket(?)";
+            $sql = "SELECT 
+            detalleticket.detalleticket_id,
+            detalleticket.descripcion,
+            detalleticket.fecha_create,
+            users.user_nom,
+            users.user_ap,
+            users.id_rol
+            FROM detalleticket
+            INNER JOIN users ON  detalleticket.user_id = users.user_id
+            WHERE ticket_id = ?;";
             $sql = $conectar->prepare($sql);
             $sql->bindValue(1, $ticket_id);
             $sql->execute();
@@ -100,40 +135,54 @@
         }
 
         public function InsertarTicketDetalle($ticket_id, $user_id, $descripcion){
-
-            $conectar=parent::conexion();
-            parent::set_names(); 
+            
+            $conectar = parent::conexion();
+            parent::set_names();
 
             $ticket = new Ticket();
-                $datos = $ticket->ListarTicketPorID($ticket_id);
-                foreach ($datos as $row){
-                    $usu_asig = $row["user_asig"];
-                    $usu_crea = $row["user_id"];
+            $datos = $ticket->ListarTicketPorID($ticket_id);
+
+            foreach ($datos as $row){
+                $usu_asig = $row["user_asig"];
+                $usu_crea = $row["user_id"];
+            }
+
+            if ($_SESSION["id_rol"] == 1) {
+                // Verifica si $usu_asig no es nulo antes de insertar notificación
+                if (!is_null($usu_asig)) {
+                    $sql0 = "INSERT INTO notificacion (not_id, user_id, mensaje, ticket_id, estado) VALUES (NULL, ?, 'Tienes una nueva respuesta del Usuario - Ticket: #', ?, 2)";
+                    $stmt0 = $conectar->prepare($sql0);
+                    $stmt0->bindValue(1, $usu_asig, PDO::PARAM_INT);
+                    $stmt0->bindValue(2, $ticket_id, PDO::PARAM_INT);
+                    $stmt0->execute();  
                 }
-
-            if($_SESSION["id_rol"] == 1){
-
-                $sql0 = "INSERT INTO notificacion (not_id, user_id, mensaje, 
-                ticket_id, estado) VALUES (NULL, $usu_asig, 'Tienes una nueva respuesta del Usuario - Ticket: # ', $ticket_id, 2)";
-                $sql0=$conectar->prepare($sql0);
-                $sql0->execute();    
-
             } else {
-                $sql0 = "INSERT INTO notificacion (not_id, user_id, mensaje, 
-                ticket_id, estado) VALUES (NULL, $usu_crea, 'Tienes una nueva respuesta del Soporte - Ticket: # ', $ticket_id, 2)";
-                $sql0=$conectar->prepare($sql0);
-                $sql0->execute();  
+                // Verifica si $usu_crea no es nulo antes de insertar notificación
+                if (!is_null($usu_crea)) {
+                    $sql0 = "INSERT INTO notificacion (not_id, user_id, mensaje, ticket_id, estado) VALUES (NULL, ?, 'Tienes una nueva respuesta del Soporte - Ticket: #', ?, 2)";
+                    $stmt0 = $conectar->prepare($sql0);
+                    $stmt0->bindValue(1, $usu_crea, PDO::PARAM_INT);
+                    $stmt0->bindValue(2, $ticket_id, PDO::PARAM_INT); 
+                    $stmt0->execute();  
+                }
             }
 
 
-            $sql = "call sp_insertar_ticketDetalle(?,?,?)";
-            $sql = $conectar->prepare($sql);
-            $sql->bindValue(1, $ticket_id);
-            $sql->bindValue(2, $user_id);
-            $sql->bindValue(3, $descripcion);
-            $sql->execute();
+            $sql = "INSERT INTO mesaayuda.detalleticket (
+                detalleticket_id,
+                ticket_id, 
+                user_id, 
+                descripcion, 
+                fecha_create, 
+                estado) 
+                VALUES (NULL, ?, ?, ?, now(), '1');";
+             $stmt = $conectar->prepare($sql);
+             $stmt->bindValue(1, $ticket_id, PDO::PARAM_INT); // Suponiendo que ticket_id es un entero
+             $stmt->bindValue(2, $user_id, PDO::PARAM_INT); // Suponiendo que user_id es un entero
+             $stmt->bindValue(3, $descripcion, PDO::PARAM_STR); // Suponiendo que descripcion es una cadena de texto
+             $stmt->execute();
 
-            return $resultado = $sql->fetchAll();
+            return $resultado = $stmt->fetchAll();
         }
 
         public function InsertarTicketDetalleCerrado($ticket_id, $user_id){
@@ -202,7 +251,7 @@
             $sql1->bindValue(2, $ticket_id);
             $sql1->execute();
             
-            return $resultado=$sql1->fetchAll();
+            return $resultado=$sql->fetchAll();
         }
 
         public function obtenerTicket(){

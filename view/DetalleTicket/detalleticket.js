@@ -3,11 +3,47 @@ function init(){
 
 }
 
+function cargarDetallesDelTicket(ticketId) {
+    $.post("../../controller/ticket.php?op=listarDetalle",{ticket_id : ticketId  }, function(data){
+        $('#lbldetalle').html(data);
+    });
+
+    $.post("../../controller/ticket.php?op=mostrar",{ticket_id : ticketId }, function(data){
+        data = JSON.parse(data);
+        $('#lblestado').html(data.estado_ticket);
+        $('#lblnomusuario').html(data.user_nom+' '+data.user_ap);
+        $('#lblfechacreacion').html(data.fecha_create);
+        $('#lblnoticket').html("Detalle Ticket - #"+data.ticket_id);
+        $('#id_uniadmin').val(data.uni_descripcion)
+        $('#subUni_id').val(data.subDescripcion)
+        $('#id_categoria').val(data.cat_descripcion); 
+        $('#prio_descrip').val(data.prio_descrip);
+        $('#titulo_ticket').val(data.titulo_ticket);
+        $('#descripcion_usu').summernote('code', data.descripcion);
+
+        
+        if(data.estado_ticket_texto == 'Cerrado'){
+            $('#pnldetalle').hide();
+        } else {
+            
+        } 
+    });
+
+}
+
 $(document).ready(function(){
-    var ticket_id = getUrlParameter('id');
 
-    listardetalle(ticket_id);
-
+    //CIFRADO
+    const url = window.location.href;
+    const params = new URLSearchParams(new URL(url).search);
+    const ticket_id = params.get("id");
+    const decoded_id  = decodeURIComponent(ticket_id);
+    const id = decoded_id.replace(/\s/g, '+');
+    
+        
+    cargarDetallesDelTicket(id);
+        
+    
     $('#ticket_descripcion').summernote({
         height: 400,
         lang: "es-ES",
@@ -67,7 +103,7 @@ $(document).ready(function(){
 
     $('#descripcion_usu').summernote('disable');
 
-    tabla=$('#documentos_data').dataTable({
+    tabla = $('#documentos_data').dataTable({
         "aProcessing": true,
         "aServerSide": true,
         dom: 'Bfrtip',
@@ -83,7 +119,7 @@ $(document).ready(function(){
         "ajax":{
             url: '../../controller/documento.php?op=listar',
             type : "post",
-            data : {ticket_id:ticket_id},
+            data : {ticket_id:id},
             dataType : "json",
             error: function(e){
                 console.log(e.responseText);
@@ -121,28 +157,19 @@ $(document).ready(function(){
     }).DataTable();
 });
 
-var getUrlParameter = function getUrlParameter(sParam) {
-    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
-        sURLVariables = sPageURL.split('&'),
-        SParameterName,
-        i;
-
-    for (i = 0; i < sURLVariables.length; i++) {
-        SParameterName = sURLVariables[i].split('=');
-
-        if(SParameterName[0] === sParam){
-            return SParameterName[1] === undefined ? true : SParameterName[1];
-        }
-    }
-};
-
 $(document).on("click", "#btnenviar", function(){
-    var ticket_id = getUrlParameter('id');
+
+    //CIFRADO
+    const url = window.location.href;
+    const params = new URLSearchParams(new URL(url).search);
+    const ticket_id = params.get("id");
+    const decoded_id  = decodeURIComponent(ticket_id);
+    const id = decoded_id.replace(/\s/g, '+');
+
     var user_id = $('#usuario_id').val(); 
     var descripcion = $('#ticket_descripcion').val(); 
 
     if ($('#ticket_descripcion').summernote('isEmpty')){
-        
         swal({
             title: "Error",
             text: "Favor de llenar la descripción del ticket",
@@ -150,8 +177,8 @@ $(document).on("click", "#btnenviar", function(){
             confirmButtonClass: "btn-warning"
         });
     } else {
-        $.post("../../controller/ticket.php?op=guardarDetalle",{ticket_id : ticket_id, user_id : user_id, descripcion : descripcion}, function(data){
-            listardetalle(ticket_id);
+        $.post("../../controller/ticket.php?op=guardarDetalle",{ticket_id : id, user_id : user_id, descripcion : descripcion}, function(data){
+            cargarDetallesDelTicket(id);
             $('#ticket_descripcion').summernote('reset');
             swal({
                 title: "Correcto",
@@ -164,6 +191,7 @@ $(document).on("click", "#btnenviar", function(){
 });
 
 $(document).on("click", "#btcerrarticket", function(){
+    
     swal({
         title: "¿Estás seguro de cerrar el Ticket?",
         text: "Cuando se cierre el Ticket no podrá ser abierto de nuevo",
@@ -174,21 +202,25 @@ $(document).on("click", "#btcerrarticket", function(){
         cancelButtonText: "No",
         closeOnConfirm: false,
     }, 
+    
     function(isConfirm) {
         if (isConfirm) {
-            var ticket_id = getUrlParameter('id'); 
+            
+            //CIFRADO
+            const url = window.location.href;
+            const params = new URLSearchParams(new URL(url).search);
+            const ticket_id = params.get("id");
+            const decoded_id  = decodeURIComponent(ticket_id);
+            const id = decoded_id.replace(/\s/g, '+');
+
             var user_id = $('#usuario_id').val(); 
-            $.post("../../controller/ticket.php?op=actualizar",{ticket_id : ticket_id, user_id : user_id }, function(data){ 
-
+            $.post("../../controller/ticket.php?op=actualizar",{ticket_id : id, user_id : user_id }, function(data){ 
             });
 
-            $.post("../../controller/email.php?op=ticket_cerrado", {ticket_id : ticket_id}, function(data){ 
-
-
+            $.post("../../controller/email.php?op=ticket_cerrado", {ticket_id : id}, function(data){ 
             });
 
-            listardetalle(ticket_id);
-
+            cargarDetallesDelTicket(id);
             swal({
                 title: "¡Ticket Cerrado!",
                 text: "El Ticket se ha cerrado exitosamente",
@@ -198,36 +230,5 @@ $(document).on("click", "#btcerrarticket", function(){
         }
     });
 });
-
-function listardetalle(ticket_id){
-    $.post("../../controller/ticket.php?op=listarDetalle",{ticket_id : ticket_id }, function(data){
-        $('#lbldetalle').html(data);
-
-    });
-
-    $.post("../../controller/ticket.php?op=mostrar",{ticket_id : ticket_id }, function(data){
-        data = JSON.parse(data);
-        $('#lblestado').html(data.estado_ticket);
-        $('#lblnomusuario').html(data.user_nom+' '+data.user_ap);
-        $('#lblfechacreacion').html(data.fecha_create);
-
-        $('#lblnoticket').html("Detalle Ticket - #"+data.ticket_id);
-
-        $('#id_uniadmin').val(data.uni_descripcion)
-        $('#subUni_id').val(data.subDescripcion)
-        $('#id_categoria').val(data.cat_descripcion); 
-        $('#prio_descrip').val(data.prio_descrip);
-        $('#titulo_ticket').val(data.titulo_ticket);
-        $('#descripcion_usu').summernote('code', data.descripcion);
-
-        
-        if(data.estado_ticket_texto == 'Cerrado'){
-            $('#pnldetalle').hide();
-        } else {
-            
-        } 
-    });
-
-}
 
 init();
