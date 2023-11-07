@@ -49,6 +49,12 @@ if ($_SESSION["id_rol"] == 1) {
             if ($_SESSION["id_rol"] == 3) {
                 ?>
                 <li class="blue-dirty">
+                    <a href="..\NuevoTicket\">
+                        <span class="glyphicon glyphicon-th"></span>
+                        <span class="lbl">Nuevo Ticket</span>
+                    </a>
+                </li>
+                <li class="blue-dirty">
                     <a href="..\Usuarios">
                         <span class="glyphicon glyphicon-th"></span>
                         <span class="lbl">Gestión de Usuarios</span>
